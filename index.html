@@ -1611,7 +1611,7 @@
             <h2>Crea Nuova Sessione</h2>
             <p>Inserisci il nome della nuova sessione di allenamento</p>
             
-            <input type="text" id="newSessionName" placeholder="es. D" maxlength="20">
+            <input type="text" id="newSessionName" placeholder="es. Sessione D" maxlength="20">
             
             <button class="session-modal-btn" onclick="createNewSession()">💾 Crea Sessione</button>
         </div>
@@ -1656,6 +1656,40 @@
     </div>
 
     <script>
+        // Database di esercizi casuali
+        const exerciseDatabase = [
+            { name: "Panca piana", series: 4, reps: 8, recovery: "2'" },
+            { name: "Squat", series: 4, reps: 8, recovery: "2'" },
+            { name: "Stacchi da terra", series: 3, reps: 6, recovery: "2'30" },
+            { name: "Military Press", series: 4, reps: 8, recovery: "2'" },
+            { name: "Trazioni", series: 3, reps: "MAX", recovery: "1'30" },
+            { name: "Rematore con bilanciere", series: 4, reps: 8, recovery: "1'30" },
+            { name: "Curl con bilanciere", series: 3, reps: 10, recovery: "1'" },
+            { name: "French Press", series: 3, reps: 12, recovery: "1'" },
+            { name: "Alzate laterali", series: 3, reps: 12, recovery: "1'" },
+            { name: "Leg Press", series: 4, reps: 10, recovery: "1'30" },
+            { name: "Leg Curl", series: 3, reps: 12, recovery: "1'" },
+            { name: "Calf Raises", series: 4, reps: 15, recovery: "1'" },
+            { name: "Crunch", series: 3, reps: 20, recovery: "1'" },
+            { name: "Plank", series: 3, reps: "60\"", recovery: "1'" },
+            { name: "Affondi", series: 3, reps: "10*2", recovery: "1'" },
+            { name: "Push Press", series: 4, reps: 6, recovery: "2'" },
+            { name: "Pulldown", series: 4, reps: 10, recovery: "1'30" },
+            { name: "Chest Fly", series: 3, reps: 12, recovery: "1'" },
+            { name: "Hammer Curl", series: 3, reps: 10, recovery: "1'" },
+            { name: "Dip", series: 3, reps: "MAX", recovery: "1'30" },
+            { name: "Good Morning", series: 3, reps: 10, recovery: "1'30" },
+            { name: "Russian Twist", series: 3, reps: "15*2", recovery: "1'" },
+            { name: "Burpees", series: 3, reps: 10, recovery: "1'30" },
+            { name: "Mountain Climbers", series: 3, reps: "20*2", recovery: "1'" },
+            { name: "Jump Squat", series: 3, reps: 12, recovery: "1'" },
+            { name: "Box Jump", series: 3, reps: 8, recovery: "1'30" },
+            { name: "Kettlebell Swing", series: 3, reps: 15, recovery: "1'" },
+            { name: "Battle Ropes", series: 3, reps: "30\"", recovery: "1'" },
+            { name: "Farmer's Walk", series: 3, reps: "20m", recovery: "1'30" },
+            { name: "Pullover", series: 3, reps: 12, recovery: "1'" }
+        ];
+
         const workoutData = {
             A: [
                 { name: "Lat presa neutra stretta", series: 4, reps: 8, recovery: "2'" },
@@ -1695,6 +1729,12 @@
         let currentDeleteIndex = null;
         let currentSessionToDelete = null;
         let sessionOrder = ['A', 'B', 'C']; // Ordine delle sessioni
+
+        // Funzione per ottenere 8 esercizi casuali
+        function getRandomExercises() {
+            const shuffled = [...exerciseDatabase].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 8);
+        }
 
         function toggleEditMode() {
             editMode = !editMode;
@@ -1911,10 +1951,8 @@
                 sessionId = sessionId + '_' + counter;
             }
             
-            // Crea la nuova sessione
-            workoutData[sessionId] = [
-                { name: "Nuovo Esercizio", series: 3, reps: 10, recovery: "1'" }
-            ];
+            // Crea la nuova sessione con 8 esercizi casuali
+            workoutData[sessionId] = getRandomExercises();
             
             // Aggiungi la sessione all'ordine
             sessionOrder.push(sessionId);
@@ -1952,9 +1990,7 @@
                 // Se non ci sono più sessioni, crea una sessione predefinita
                 if (sessionOrder.length === 0) {
                     sessionOrder = ['A'];
-                    workoutData.A = [
-                        { name: "Nuovo Esercizio", series: 3, reps: 10, recovery: "1'" }
-                    ];
+                    workoutData.A = getRandomExercises();
                     saveWorkoutData();
                     saveSessionOrder();
                 }
