@@ -46,7 +46,7 @@
             gap: 8px;
         }
         
-        .theme-toggle, .edit-toggle {
+        .theme-toggle, .edit-toggle, .date-toggle {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             width: 36px;
@@ -60,7 +60,7 @@
             justify-content: center;
         }
         
-        .theme-toggle:hover, .edit-toggle:hover {
+        .theme-toggle:hover, .edit-toggle:hover, .date-toggle:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
@@ -588,6 +588,135 @@
             transform: translateY(0);
         }
         
+        /* Modal per cambio data */
+        .date-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .date-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .date-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+            padding: 30px 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        body.light .date-modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+            border: 1px solid #d1d5db;
+        }
+        
+        .date-modal-emoji {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .date-modal h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        body.light .date-modal h2 {
+            color: #0f172a;
+        }
+        
+        .date-modal p {
+            font-size: 15px;
+            color: #a0a0a0;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        
+        body.light .date-modal p {
+            color: #64748b;
+        }
+        
+        .date-modal input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #3a3a3a;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #242424;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+        }
+        
+        body.light .date-modal input {
+            background: #ffffff;
+            border-color: #9ca3af;
+            color: #0f172a;
+        }
+        
+        .date-modal input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .date-modal input::placeholder {
+            color: #606060;
+        }
+        
+        body.light .date-modal input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .date-modal button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .date-modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .date-modal button:active {
+            transform: translateY(0);
+        }
+        
         .tabs {
             display: flex;
             background: #141414;
@@ -1019,7 +1148,7 @@
                 right: 12px;
             }
             
-            .theme-toggle, .edit-toggle {
+            .theme-toggle, .edit-toggle, .date-toggle {
                 width: 32px;
                 height: 32px;
                 font-size: 16px;
@@ -1141,7 +1270,7 @@
 <body>
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-card">
-            <div class="welcome-emoji">🏋‍♂</div>
+            <div class="welcome-emoji">🏋️‍♂️</div>
             <h1>Benvenuto!</h1>
             <p>Inizia il tuo percorso di allenamento personalizzato.<br>Inserisci i tuoi dati per iniziare</p>
             
@@ -1162,7 +1291,7 @@
     <!-- Modal Conferma Eliminazione -->
     <div class="confirm-modal" id="confirmModal">
         <div class="confirm-modal-content">
-            <div class="confirm-modal-icon">🗑</div>
+            <div class="confirm-modal-icon">🗑️</div>
             <h3>Conferma Eliminazione</h3>
             <p>Sei sicuro di voler eliminare questo esercizio?<br>Questa azione non può essere annullata.</p>
             <div class="confirm-modal-buttons">
@@ -1172,15 +1301,29 @@
         </div>
     </div>
     
+    <!-- Modal per cambio data -->
+    <div class="date-modal" id="dateModal">
+        <div class="date-modal-content">
+            <div class="date-modal-emoji">📅</div>
+            <h2>Modifica Data di Inizio</h2>
+            <p>Seleziona la nuova data di inizio del tuo programma di allenamento</p>
+            
+            <input type="date" id="newStartDateInput">
+            
+            <button class="date-modal-btn" onclick="saveNewStartDate()">💾 Salva Nuova Data</button>
+        </div>
+    </div>
+    
     <div class="app-content" id="appContent">
         <div class="container">
         <div class="header">
             <div class="header-buttons">
-                <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()" title="Modalità modifica">✏</button>
+                <button class="date-toggle" onclick="openDateModal()" title="Cambia data di inizio">📅</button>
+                <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()" title="Modalità modifica">✏️</button>
                 <button class="theme-toggle" onclick="toggleTheme()" title="Cambia tema">🌙</button>
             </div>
-            <h1>🏋‍♂ Programma Allenamento 🚀</h1>
-            <div class="date"><span id="userName">Atleta</span> - Data inizio: <span id="startDate">01/10/2025</span></div>
+            <h1>🏋️‍♂️💪 Programma Allenamento 💪🚀</h1>
+            <div class="date"><span id="userName">Giulio Riso</span> - Data inizio: <span id="startDate">01/10/2025</span></div>
         </div>
         
         <div class="tabs">
@@ -1201,7 +1344,6 @@
     </div>
 
     <script>
-        // Il JavaScript rimane identico al codice precedente
         const workoutData = {
             A: [
                 { name: "Lat presa neutra stretta", series: 4, reps: 8, recovery: "2'" },
@@ -1248,7 +1390,7 @@
                 btn.textContent = '✅';
             } else {
                 btn.classList.remove('active');
-                btn.textContent = '✏';
+                btn.textContent = '✏️';
                 saveWorkoutData();
             }
             renderSession('A');
@@ -1260,7 +1402,7 @@
             if (activeTabs.length > 0) {
                 const activeSession = activeTabs[0].textContent.replace('Sessione ', '');
                 document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
-                document.getElementById(session${activeSession}).classList.add('active');
+                document.getElementById(`session${activeSession}`).classList.add('active');
             }
         }
 
@@ -1371,15 +1513,49 @@
             // Converte da formato YYYY-MM-DD a DD/MM/YYYY
             const parts = dateString.split('-');
             if (parts.length === 3) {
-                return ${parts[2]}/${parts[1]}/${parts[0]};
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
             }
             return dateString;
+        }
+
+        function openDateModal() {
+            const currentDate = localStorage.getItem('startDate');
+            document.getElementById('newStartDateInput').value = currentDate;
+            document.getElementById('dateModal').classList.add('show');
+        }
+
+        function saveNewStartDate() {
+            const newDateInput = document.getElementById('newStartDateInput');
+            const newDate = newDateInput.value;
+            
+            if (!newDate) {
+                newDateInput.style.borderColor = '#ef4444';
+                newDateInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    newDateInput.style.animation = '';
+                }, 500);
+                return;
+            }
+            
+            localStorage.setItem('startDate', newDate);
+            document.getElementById('startDate').textContent = formatDisplayDate(newDate);
+            document.getElementById('dateModal').classList.remove('show');
+            
+            // Mostra messaggio di conferma
+            const message = document.getElementById('savedMessage');
+            message.textContent = '✅ Data di inizio aggiornata con successo!';
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+                message.textContent = '✅ Allenamento salvato con successo!';
+            }, 2500);
         }
         
         // Permetti invio con Enter
         document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.getElementById('nameInput');
             const dateInput = document.getElementById('startDateInput');
+            const newDateInput = document.getElementById('newStartDateInput');
             
             if (nameInput) {
                 nameInput.addEventListener('keypress', function(e) {
@@ -1396,13 +1572,21 @@
                     }
                 });
             }
+            
+            if (newDateInput) {
+                newDateInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        saveNewStartDate();
+                    }
+                });
+            }
         });
 
         function loadTheme() {
             const theme = localStorage.getItem('theme') || 'dark';
             if (theme === 'light') {
                 document.body.classList.add('light');
-                document.querySelector('.theme-toggle').textContent = '☀';
+                document.querySelector('.theme-toggle').textContent = '☀️';
             }
         }
 
@@ -1410,7 +1594,7 @@
             document.body.classList.toggle('light');
             const isLight = document.body.classList.contains('light');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            document.querySelector('.theme-toggle').textContent = isLight ? '☀' : '🌙';
+            document.querySelector('.theme-toggle').textContent = isLight ? '☀️' : '🌙';
         }
 
         function loadSavedWeights() {
@@ -1447,20 +1631,20 @@
             const remainingSeconds = seconds % 60;
             
             if (minutes > 0 && remainingSeconds > 0) {
-                return ${minutes}'${remainingSeconds.toString().padStart(2, '0')};
+                return `${minutes}'${remainingSeconds.toString().padStart(2, '0')}`;
             } else if (minutes > 0) {
-                return ${minutes}';
+                return `${minutes}'`;
             } else {
-                return ${remainingSeconds}";
+                return `${remainingSeconds}"`;
             }
         }
 
         function renderSession(session) {
-            const container = document.getElementById(session${session});
+            const container = document.getElementById(`session${session}`);
             container.innerHTML = '';
             
             workoutData[session].forEach((exercise, index) => {
-                const exerciseId = ${session}-${index};
+                const exerciseId = `${session}-${index}`;
                 const savedWeight = savedWeights[exerciseId] || '';
                 
                 const exerciseDiv = document.createElement('div');
@@ -1475,7 +1659,7 @@
                                 value="${exercise.name}"
                                 onchange="workoutData['${session}'][${index}].name = this.value; saveWorkoutData();"
                             >
-                            <button class="delete-btn" onclick="deleteExercise('${session}', ${index})">🗑</button>
+                            <button class="delete-btn" onclick="deleteExercise('${session}', ${index})">🗑️</button>
                         </div>
                         <div class="exercise-info">
                             <div class="info-item">
@@ -1606,7 +1790,7 @@
             document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
             
             event.target.classList.add('active');
-            document.getElementById(session${session}).classList.add('active');
+            document.getElementById(`session${session}`).classList.add('active');
         }
 
         function saveWorkout() {
