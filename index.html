@@ -3,66 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programma Allenamento - Giulio Riso</title>
+    <title>MyWorkout - Il Tuo Personal Trainer</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --bg-element: #242424;
+            --border-dark: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+        }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
             font-family: 'Inter', sans-serif;
-            background: #0f0f0f;
+            background: var(--bg-dark);
             min-height: 100vh;
-            padding: 12px;
+            padding: 8px;
+            line-height: 1.4;
+            color: var(--text-primary);
         }
         
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: #1a1a1a;
+            background: var(--bg-card);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             overflow: hidden;
-            border: 1px solid #2a2a2a;
+            border: 1px solid var(--border-dark);
         }
         
         .header {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: var(--primary-gradient);
             color: white;
-            padding: 30px 20px;
+            padding: 24px 16px;
             text-align: center;
             position: relative;
         }
         
         .header-buttons {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 12px;
+            right: 12px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         
         .theme-toggle, .edit-toggle {
             background: rgba(255, 255, 255, 0.2);
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 18px;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(10px);
         }
         
-        .theme-toggle:hover, .edit-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
+        .theme-toggle:active, .edit-toggle:active {
+            transform: scale(0.95);
         }
         
         .edit-toggle.active {
@@ -70,16 +89,16 @@
         }
         
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             margin-bottom: 6px;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
             line-height: 1.2;
-            padding: 0 10px;
+            padding: 0 40px;
         }
         
         .header .date {
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.95;
             font-weight: 500;
             line-height: 1.3;
@@ -87,86 +106,62 @@
         
         /* Tema Chiaro */
         body.light {
-            background: #e8eaf0;
+            --bg-dark: #f0f2f5;
+            --bg-card: #ffffff;
+            --bg-element: #f8f9fa;
+            --border-dark: #e1e5e9;
+            --text-primary: #1a202c;
+            --text-secondary: #6c757d;
+            background: var(--bg-dark);
         }
         
         body.light .container {
-            background: #ffffff;
-            border: 1px solid #c7cad9;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
         
         body.light .tabs {
-            background: #f0f1f5;
-            border-bottom: 1px solid #d1d5db;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
         }
         
         body.light .tab {
-            color: #4b5563;
+            color: var(--text-secondary);
         }
         
-        body.light .tab:hover {
-            background: #e5e7eb;
-            color: #1f2937;
+        body.light .tab.active {
+            background: var(--primary-gradient);
+            color: #ffffff;
         }
         
         body.light .exercise {
-            background: #f8f9fb;
-            border: 1px solid #d1d5db;
-        }
-        
-        body.light .exercise:hover {
-            border-color: #9ca3af;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            background: var(--bg-element);
+            border: 1px solid var(--border-dark);
         }
         
         body.light .exercise-name {
-            color: #0f172a;
+            color: var(--text-primary);
         }
         
         body.light .exercise-info {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-        }
-        
-        body.light .info-label {
-            color: #64748b;
-        }
-        
-        body.light .info-value {
-            color: #4f46e5;
-        }
-        
-        body.light .weight-input label {
-            color: #1f2937;
-        }
-        
-        body.light .weight-input input {
-            background: #ffffff;
-            border-color: #9ca3af;
-            color: #0f172a;
-        }
-        
-        body.light .weight-input input::placeholder {
-            color: #9ca3af;
-        }
-        
-        body.light .weight-input input:focus {
-            background: #fafbfc;
-            border-color: #4f46e5;
-        }
-        
-        body.light .weight-input span {
-            color: #4b5563;
+            background: var(--bg-card);
+            border: 1px solid var(--border-dark);
         }
         
         /* Welcome Screen */
         .welcome-screen {
             display: none;
-            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 10000;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 16px;
         }
         
         .welcome-screen.show {
@@ -174,39 +169,34 @@
         }
         
         .welcome-card {
-            background: #1a1a1a;
-            border-radius: 24px;
-            padding: 40px 25px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 32px 24px;
             max-width: 100%;
             width: 100%;
             text-align: center;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.6s ease-out;
-        }
-        
-        body.light .welcome-card {
-            background: #ffffff;
-            border: 1px solid #c7cad9;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(30px) scale(0.98);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         
         .welcome-emoji {
-            font-size: 60px;
+            font-size: 64px;
             margin-bottom: 20px;
             display: inline-block;
             animation: bounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
         
         @keyframes bounce {
@@ -215,27 +205,18 @@
         }
         
         .welcome-card h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            color: #ffffff;
+            color: var(--text-primary);
             margin-bottom: 12px;
-            letter-spacing: -0.5px;
-            line-height: 1.2;
-        }
-        
-        body.light .welcome-card h1 {
-            color: #0f172a;
+            letter-spacing: -0.3px;
         }
         
         .welcome-card p {
-            font-size: 16px;
-            color: #a0a0a0;
-            margin-bottom: 30px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
             line-height: 1.5;
-        }
-        
-        body.light .welcome-card p {
-            color: #64748b;
         }
         
         .input-group {
@@ -246,75 +227,53 @@
             display: block;
             font-size: 14px;
             font-weight: 600;
-            color: #a0a0a0;
-            margin-bottom: 6px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
             text-align: left;
-        }
-        
-        body.light .input-group label {
-            color: #64748b;
         }
         
         .input-group input {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #353535;
+            padding: 16px;
+            border: 2px solid var(--border-dark);
             border-radius: 12px;
             font-size: 16px;
-            background: #242424;
-            color: #ffffff;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        
-        body.light .input-group input {
-            background: #f8f9fb;
-            border-color: #9ca3af;
-            color: #0f172a;
+            background: var(--bg-element);
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
         }
         
         .input-group input:focus {
             outline: none;
             border-color: #6366f1;
-            background: #2a2a2a;
+            background: var(--bg-card);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
         }
         
-        body.light .input-group input:focus {
-            background: #ffffff;
-            border-color: #6366f1;
-        }
-        
         .input-group input::placeholder {
-            color: #606060;
-        }
-        
-        body.light .input-group input::placeholder {
-            color: #9ca3af;
+            color: #666;
         }
         
         .welcome-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 16px 30px;
+            padding: 16px;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            transition: all 0.3s;
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
-        }
-        
-        .welcome-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            margin-top: 8px;
         }
         
         .welcome-btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
         
         .app-content {
@@ -333,12 +292,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 16px;
         }
         
         .confirm-modal.show {
@@ -347,59 +306,35 @@
         }
         
         .confirm-modal-content {
-            background: #1a1a1a;
-            padding: 25px;
-            border-radius: 18px;
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 16px;
             text-align: center;
             max-width: 100%;
             width: 100%;
-            border: 1px solid #2a2a2a;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-            animation: scaleIn 0.3s ease-out;
-        }
-        
-        body.light .confirm-modal-content {
-            background: #ffffff;
-            border: 1px solid #c7cad9;
-        }
-        
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         .confirm-modal-icon {
             font-size: 48px;
             margin-bottom: 12px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
         
         .confirm-modal h3 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-        
-        body.light .confirm-modal h3 {
-            color: #0f172a;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
         
         .confirm-modal p {
             font-size: 14px;
-            color: #a0a0a0;
+            color: var(--text-secondary);
             margin-bottom: 20px;
             line-height: 1.4;
-        }
-        
-        body.light .confirm-modal p {
-            color: #64748b;
         }
         
         .confirm-modal-buttons {
@@ -415,185 +350,43 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            min-height: 44px;
         }
         
         .confirm-btn-cancel {
-            background: #353535;
-            color: #ffffff;
-        }
-        
-        body.light .confirm-btn-cancel {
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        .confirm-btn-cancel:hover {
-            background: #404040;
-        }
-        
-        body.light .confirm-btn-cancel:hover {
-            background: #d1d5db;
+            background: var(--bg-element);
+            color: var(--text-primary);
         }
         
         .confirm-btn-delete {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: var(--danger-gradient);
             color: white;
-            box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
         
-        .confirm-btn-delete:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        .confirm-btn:active {
+            transform: scale(0.98);
         }
         
-        /* Modal per nome utente */
-        .name-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-        }
-        
-        .name-modal.show {
-            display: flex;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .name-modal-content {
-            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
-            padding: 30px 25px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 100%;
-            width: 100%;
-            border: 1px solid #3a3a3a;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.4s ease-out;
-        }
-        
-        body.light .name-modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
-            border: 1px solid #d1d5db;
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        .name-modal-emoji {
-            font-size: 56px;
-            margin-bottom: 16px;
-            animation: wave 1s ease-in-out infinite;
-        }
-        
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(20deg); }
-            75% { transform: rotate(-20deg); }
-        }
-        
-        .name-modal h2 {
-            font-size: 24px;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-        
-        body.light .name-modal h2 {
-            color: #0f172a;
-        }
-        
-        .name-modal p {
-            font-size: 15px;
-            color: #a0a0a0;
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-        
-        body.light .name-modal p {
-            color: #64748b;
-        }
-        
-        .name-modal input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #3a3a3a;
-            border-radius: 10px;
-            font-size: 15px;
-            background: #242424;
-            color: #ffffff;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 16px;
-            transition: all 0.3s;
-        }
-        
-        body.light .name-modal input {
-            background: #ffffff;
-            border-color: #9ca3af;
-            color: #0f172a;
-        }
-        
-        .name-modal input:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .name-modal input::placeholder {
-            color: #606060;
-        }
-        
-        body.light .name-modal input::placeholder {
-            color: #9ca3af;
-        }
-        
-        .name-modal button {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
-        }
-        
-        .name-modal button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-        }
-        
-        .name-modal button:active {
-            transform: translateY(0);
-        }
-        
+        /* Tabs migliorati */
         .tabs {
             display: flex;
             background: #141414;
             padding: 6px;
-            gap: 6px;
-            border-bottom: 1px solid #2a2a2a;
+            gap: 4px;
+            border-bottom: 1px solid var(--border-dark);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        body.light .tabs {
+            background: #f8f9fa;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
         
         .tab {
@@ -601,32 +394,29 @@
             padding: 12px 8px;
             text-align: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             border: none;
             background: transparent;
             color: #808080;
             border-radius: 10px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .tab:hover {
-            background: #242424;
-            color: #a0a0a0;
+            min-width: 0;
+            white-space: nowrap;
         }
         
         .tab.active {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: var(--primary-gradient);
             color: #ffffff;
-            box-shadow: 0 3px 8px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
         
         .content {
-            padding: 20px;
+            padding: 20px 16px;
         }
         
         .session {
@@ -635,47 +425,48 @@
         
         .session.active {
             display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .exercise {
-            background: #242424;
+            background: var(--bg-element);
             border-radius: 14px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 12px;
-            border: 1px solid #2f2f2f;
-            transition: all 0.2s;
+            border: 1px solid var(--border-dark);
+            transition: all 0.2s ease;
+            position: relative;
         }
         
-        .exercise:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-            border-color: #404040;
+        .exercise:active {
+            transform: scale(0.998);
         }
         
         .exercise-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            color: #ffffff;
+            color: var(--text-primary);
             margin-bottom: 14px;
             line-height: 1.3;
+            word-break: break-word;
         }
         
         .exercise-name-edit {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #353535;
-            border-radius: 8px;
+            padding: 12px;
+            border: 2px solid var(--border-dark);
+            border-radius: 10px;
             font-size: 15px;
-            background: #1a1a1a;
-            color: #ffffff;
+            background: var(--bg-card);
+            color: var(--text-primary);
             font-weight: 600;
             margin-bottom: 14px;
-        }
-        
-        body.light .exercise-name-edit {
-            background: #ffffff;
-            border-color: #9ca3af;
-            color: #0f172a;
+            transition: all 0.2s ease;
         }
         
         .exercise-name-edit:focus {
@@ -686,7 +477,7 @@
         .exercise-header-edit {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 14px;
             gap: 10px;
         }
@@ -695,11 +486,11 @@
             background: #ef4444;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             flex-shrink: 0;
             min-width: 44px;
             min-height: 44px;
@@ -708,18 +499,18 @@
             justify-content: center;
         }
         
-        .delete-btn:hover {
+        .delete-btn:active {
+            transform: scale(0.95);
             background: #dc2626;
-            transform: scale(1.05);
         }
         
         .exercise-info {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 14px;
             padding: 14px;
-            background: #1a1a1a;
+            background: var(--bg-card);
             border-radius: 10px;
         }
         
@@ -729,155 +520,77 @@
         
         .info-label {
             font-size: 10px;
-            color: #909090;
-            margin-bottom: 4px;
-            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
         
         .info-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             color: #a78bfa;
         }
         
-        .number-input-container {
+        .number-input-container, .recovery-input-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
         }
         
-        .number-input {
+        .number-input, .recovery-input {
             width: 50px;
-            padding: 6px;
-            border: 2px solid #353535;
-            border-radius: 6px;
-            font-size: 13px;
-            background: #242424;
-            color: #ffffff;
-            font-weight: 600;
+            padding: 8px 4px;
+            border: 2px solid var(--border-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--bg-element);
+            color: var(--text-primary);
+            font-weight: 700;
             text-align: center;
+            transition: all 0.2s ease;
         }
         
-        body.light .number-input {
-            background: #f8f9fb;
-            border-color: #9ca3af;
-            color: #0f172a;
-        }
-        
-        .number-input:focus {
+        .number-input:focus, .recovery-input:focus {
             outline: none;
             border-color: #6366f1;
         }
         
-        .number-btn {
-            background: #353535;
-            color: #ffffff;
+        .number-btn, .recovery-btn {
+            background: var(--bg-element);
+            color: var(--text-primary);
             border: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
-            min-width: 26px;
+            transition: all 0.2s ease;
+            min-width: 32px;
         }
         
-        .number-btn:hover {
-            background: #404040;
-        }
-        
-        body.light .number-btn {
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        body.light .number-btn:hover {
-            background: #d1d5db;
-        }
-        
-        .recovery-input-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-        
-        .recovery-input {
-            width: 60px;
-            padding: 6px;
-            border: 2px solid #353535;
-            border-radius: 6px;
-            font-size: 13px;
-            background: #242424;
-            color: #ffffff;
-            font-weight: 600;
-            text-align: center;
-        }
-        
-        body.light .recovery-input {
-            background: #f8f9fb;
-            border-color: #9ca3af;
-            color: #0f172a;
-        }
-        
-        .recovery-input:focus {
-            outline: none;
-            border-color: #6366f1;
-        }
-        
-        .recovery-btn {
-            background: #353535;
-            color: #ffffff;
-            border: none;
-            width: 26px;
-            height: 26px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            min-width: 26px;
-        }
-        
-        .recovery-btn:hover {
-            background: #404040;
-        }
-        
-        body.light .recovery-btn {
-            background: #e5e7eb;
-            color: #374151;
-        }
-        
-        body.light .recovery-btn:hover {
-            background: #d1d5db;
+        .number-btn:active, .recovery-btn:active {
+            transform: scale(0.95);
+            background: var(--border-dark);
         }
         
         .info-value-edit {
             width: 100%;
-            padding: 6px;
-            border: 2px solid #353535;
-            border-radius: 6px;
-            font-size: 13px;
-            background: #242424;
-            color: #ffffff;
+            padding: 8px;
+            border: 2px solid var(--border-dark);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--bg-element);
+            color: var(--text-primary);
             font-weight: 600;
             text-align: center;
-        }
-        
-        body.light .info-value-edit {
-            background: #f8f9fb;
-            border-color: #9ca3af;
-            color: #0f172a;
+            transition: all 0.2s ease;
         }
         
         .info-value-edit:focus {
@@ -886,24 +599,24 @@
         }
         
         .add-exercise-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--success-gradient);
             color: white;
             border: none;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
             margin-bottom: 12px;
-            transition: all 0.2s;
-            box-shadow: 0 3px 8px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
             min-height: 44px;
         }
         
-        .add-exercise-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 12px rgba(16, 185, 129, 0.4);
+        .add-exercise-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 1px 6px rgba(16, 185, 129, 0.4);
         }
         
         .weight-input {
@@ -914,87 +627,96 @@
         
         .weight-input label {
             font-weight: 600;
-            color: #c0c0c0;
-            font-size: 13px;
+            color: var(--text-secondary);
+            font-size: 14px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .weight-input input {
             flex: 1;
-            padding: 12px 14px;
-            border: 1.5px solid #353535;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #1a1a1a;
-            color: #ffffff;
+            padding: 14px 12px;
+            border: 2px solid var(--border-dark);
+            border-radius: 10px;
+            font-size: 15px;
+            background: var(--bg-card);
+            color: var(--text-primary);
             font-weight: 600;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             min-height: 44px;
-        }
-        
-        .weight-input input::placeholder {
-            color: #606060;
         }
         
         .weight-input input:focus {
             outline: none;
             border-color: #6366f1;
-            background: #202020;
+            background: var(--bg-element);
         }
         
         .weight-input span {
             font-weight: 700;
-            color: #909090;
-            font-size: 13px;
+            color: var(--text-secondary);
+            font-size: 14px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         
         .save-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 15px;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: all 0.2s;
-            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             min-height: 44px;
-        }
-        
-        .save-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            position: relative;
+            overflow: hidden;
         }
         
         .save-btn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
         
         .saved-message {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--success-gradient);
             color: #ffffff;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             text-align: center;
-            margin-top: 12px;
+            margin-top: 16px;
             display: none;
-            font-weight: 600;
-            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
             font-size: 14px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .saved-message.show {
             display: block;
         }
 
-        /* Media Queries per Mobile */
-        @media (max-width: 480px) {
+        /* Miglioramenti specifici per mobile */
+        @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 6px;
+                -webkit-text-size-adjust: 100%;
             }
             
             .container {
@@ -1002,31 +724,31 @@
             }
             
             .header {
-                padding: 25px 15px;
+                padding: 20px 12px;
             }
             
             .header h1 {
-                font-size: 22px;
-                padding: 0 5px;
+                font-size: 18px;
+                padding: 0 30px;
             }
             
             .header .date {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .header-buttons {
-                top: 12px;
-                right: 12px;
+                top: 10px;
+                right: 10px;
             }
             
             .theme-toggle, .edit-toggle {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
                 font-size: 16px;
             }
             
             .content {
-                padding: 15px;
+                padding: 16px 12px;
             }
             
             .exercise {
@@ -1035,13 +757,13 @@
             }
             
             .exercise-info {
-                gap: 8px;
-                padding: 12px;
                 grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
             }
             
             .exercise-name {
-                font-size: 15px;
+                font-size: 14px;
             }
             
             .weight-input {
@@ -1052,44 +774,50 @@
             
             .weight-input label {
                 text-align: center;
+                font-size: 13px;
             }
             
             .tabs {
                 padding: 4px;
-                gap: 4px;
             }
             
             .tab {
                 padding: 10px 6px;
-                font-size: 13px;
+                font-size: 12px;
                 min-height: 40px;
             }
             
             .welcome-card {
-                padding: 30px 20px;
+                padding: 28px 20px;
             }
             
             .welcome-emoji {
-                font-size: 50px;
+                font-size: 56px;
             }
             
             .welcome-card h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .input-group input {
-                padding: 14px 16px;
-                font-size: 15px;
+                padding: 14px;
+                font-size: 16px;
+            }
+            
+            /* Miglioramenti touch */
+            button, input, .tab {
+                touch-action: manipulation;
             }
         }
 
         @media (max-width: 360px) {
             .header h1 {
-                font-size: 20px;
+                font-size: 16px;
+                padding: 0 20px;
             }
             
             .exercise-name {
-                font-size: 14px;
+                font-size: 13px;
             }
             
             .info-value {
@@ -1097,74 +825,66 @@
             }
             
             .tab {
-                font-size: 12px;
+                font-size: 11px;
                 padding: 8px 4px;
+            }
+            
+            .welcome-card {
+                padding: 24px 16px;
+            }
+            
+            .welcome-emoji {
+                font-size: 48px;
+            }
+            
+            .welcome-card h1 {
+                font-size: 20px;
             }
         }
 
-        /* Media Query per Desktop */
-        @media (min-width: 769px) {
-            body {
-                padding: 20px;
+        /* Supporto per dispositivi con notch */
+        @supports(padding: max(0px)) {
+            .header, .content {
+                padding-left: max(16px, env(safe-area-inset-left));
+                padding-right: max(16px, env(safe-area-inset-right));
             }
-            
-            .container {
-                border-radius: 24px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            }
-            
-            .header {
-                padding: 40px;
-            }
-            
-            .header h1 {
-                font-size: 32px;
-            }
-            
-            .content {
-                padding: 32px;
-            }
-            
-            .exercise {
-                padding: 24px;
-                margin-bottom: 16px;
-            }
-            
-            .exercise-info {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
-                padding: 16px;
-            }
+        }
+
+        /* Ottimizzazioni prestazioni */
+        .exercise, .tab, button {
+            will-change: transform;
         }
     </style>
 </head>
 <body>
     <div class="welcome-screen" id="welcomeScreen">
         <div class="welcome-card">
-            <div class="welcome-emoji">🏋️‍♂️</div>
-            <h1>Benvenuto!</h1>
-            <p>Inizia il tuo percorso di allenamento personalizzato.<br>Inserisci i tuoi dati per iniziare</p>
+            <div class="welcome-emoji">💪</div>
+            <h1>Inizia il Tuo Allenamento!</h1>
+            <p>Crea il tuo programma personalizzato e raggiungi i tuoi obiettivi fitness</p>
             
             <div class="input-group">
-                <label for="nameInput">Il tuo nome</label>
-                <input type="text" id="nameInput" placeholder="Inserisci il tuo nome" maxlength="30">
+                <label for="nameInput">Il Tuo Nome</label>
+                <input type="text" id="nameInput" placeholder="Come ti chiami?" maxlength="30" autocapitalize="words">
             </div>
             
             <div class="input-group">
-                <label for="startDateInput">Data di inizio programma</label>
+                <label for="startDateInput">Data di Inizio</label>
                 <input type="date" id="startDateInput">
             </div>
             
-            <button class="welcome-btn" onclick="saveUserData()">Inizia ad Allenarti! 💪</button>
+            <button class="welcome-btn" onclick="saveUserData()">
+                🚀 Inizia Ora!
+            </button>
         </div>
     </div>
     
     <!-- Modal Conferma Eliminazione -->
     <div class="confirm-modal" id="confirmModal">
         <div class="confirm-modal-content">
-            <div class="confirm-modal-icon">🗑️</div>
+            <div class="confirm-modal-icon">⚠️</div>
             <h3>Conferma Eliminazione</h3>
-            <p>Sei sicuro di voler eliminare questo esercizio?<br>Questa azione non può essere annullata.</p>
+            <p>Sei sicuro di voler eliminare questo esercizio? Questa azione non può essere annullata.</p>
             <div class="confirm-modal-buttons">
                 <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
                 <button class="confirm-btn confirm-btn-delete" id="confirmDeleteBtn">Elimina</button>
@@ -1179,8 +899,8 @@
                 <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()" title="Modalità modifica">✏️</button>
                 <button class="theme-toggle" onclick="toggleTheme()" title="Cambia tema">🌙</button>
             </div>
-            <h1>🏋️‍♂️💪 Programma Allenamento 💪🚀</h1>
-            <div class="date"><span id="userName">Giulio Riso</span> - Data inizio: <span id="startDate">01/10/2025</span></div>
+            <h1>💪 Programma Allenamento</h1>
+            <div class="date"><span id="userName">Giulio Riso</span> - Iniziato: <span id="startDate">01/10/2025</span></div>
         </div>
         
         <div class="tabs">
@@ -1194,14 +914,17 @@
             <div id="sessionB" class="session"></div>
             <div id="sessionC" class="session"></div>
             
-            <button class="save-btn" onclick="saveWorkout()">💾 Salva Allenamento</button>
-            <div id="savedMessage" class="saved-message">✅ Allenamento salvato con successo!</div>
+            <button class="save-btn" onclick="saveWorkout()">
+                💾 Salva Progressi
+            </button>
+            <div id="savedMessage" class="saved-message">
+                ✅ Allenamento salvato con successo!
+            </div>
         </div>
     </div>
     </div>
 
     <script>
-        // Il JavaScript rimane identico al codice precedente
         const workoutData = {
             A: [
                 { name: "Lat presa neutra stretta", series: 4, reps: 8, recovery: "2'" },
@@ -1255,7 +978,6 @@
             renderSession('B');
             renderSession('C');
             
-            // Mostra la sessione attiva corrente
             const activeTabs = document.querySelectorAll('.tab.active');
             if (activeTabs.length > 0) {
                 const activeSession = activeTabs[0].textContent.replace('Sessione ', '');
@@ -1317,7 +1039,6 @@
             
             if (!userName || !startDate) {
                 document.getElementById('welcomeScreen').classList.add('show');
-                // Imposta la data di oggi come valore predefinito
                 if (!startDate) {
                     const today = new Date();
                     const formattedDate = today.toISOString().split('T')[0];
@@ -1341,20 +1062,12 @@
             let startDate = dateInput.value;
             
             if (!userName) {
-                nameInput.style.borderColor = '#ef4444';
-                nameInput.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    nameInput.style.animation = '';
-                }, 500);
+                showInputError(nameInput);
                 return;
             }
             
             if (!startDate) {
-                dateInput.style.borderColor = '#ef4444';
-                dateInput.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    dateInput.style.animation = '';
-                }, 500);
+                showInputError(dateInput);
                 return;
             }
             
@@ -1367,8 +1080,15 @@
             document.getElementById('appContent').classList.add('show');
         }
 
+        function showInputError(input) {
+            input.style.borderColor = '#ef4444';
+            input.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                input.style.animation = '';
+            }, 500);
+        }
+
         function formatDisplayDate(dateString) {
-            // Converte da formato YYYY-MM-DD a DD/MM/YYYY
             const parts = dateString.split('-');
             if (parts.length === 3) {
                 return `${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -1376,7 +1096,6 @@
             return dateString;
         }
         
-        // Permetti invio con Enter
         document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.getElementById('nameInput');
             const dateInput = document.getElementById('startDateInput');
@@ -1421,28 +1140,24 @@
         }
 
         function parseRecoveryTime(recovery) {
-            // Converte il formato "1'30" in secondi totali
-            if (!recovery) return 90; // Valore di default
+            if (!recovery) return 90;
             
             let totalSeconds = 0;
             
-            // Cerca i minuti
             const minutesMatch = recovery.match(/(\d+)'/);
             if (minutesMatch) {
                 totalSeconds += parseInt(minutesMatch[1]) * 60;
             }
             
-            // Cerca i secondi
             const secondsMatch = recovery.match(/(\d+)(?:"|'')?$/);
             if (secondsMatch) {
                 totalSeconds += parseInt(secondsMatch[1]);
             }
             
-            return totalSeconds || 90; // Se non trova nulla, ritorna 90 secondi
+            return totalSeconds || 90;
         }
 
         function formatRecoveryTime(seconds) {
-            // Converte i secondi nel formato "1'30"
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
             
@@ -1584,7 +1299,7 @@
         function increaseRecovery(session, index) {
             const currentRecovery = workoutData[session][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
-            const newSeconds = currentSeconds + 15; // Aumenta di 15 secondi
+            const newSeconds = currentSeconds + 15;
             workoutData[session][index].recovery = formatRecoveryTime(newSeconds);
             saveWorkoutData();
             renderSession(session);
@@ -1593,8 +1308,8 @@
         function decreaseRecovery(session, index) {
             const currentRecovery = workoutData[session][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
-            if (currentSeconds > 15) { // Non scendere sotto i 15 secondi
-                const newSeconds = currentSeconds - 15; // Diminuisce di 15 secondi
+            if (currentSeconds > 15) {
+                const newSeconds = currentSeconds - 15;
                 workoutData[session][index].recovery = formatRecoveryTime(newSeconds);
                 saveWorkoutData();
                 renderSession(session);
