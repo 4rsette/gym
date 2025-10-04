@@ -717,12 +717,248 @@
             transform: translateY(0);
         }
         
+        /* Modal per nuova sessione */
+        .session-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .session-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .session-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+            padding: 30px 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        body.light .session-modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+            border: 1px solid #d1d5db;
+        }
+        
+        .session-modal-emoji {
+            font-size: 56px;
+            margin-bottom: 16px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .session-modal h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        body.light .session-modal h2 {
+            color: #0f172a;
+        }
+        
+        .session-modal p {
+            font-size: 15px;
+            color: #a0a0a0;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        
+        body.light .session-modal p {
+            color: #64748b;
+        }
+        
+        .session-modal input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #3a3a3a;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #242424;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+        }
+        
+        body.light .session-modal input {
+            background: #ffffff;
+            border-color: #9ca3af;
+            color: #0f172a;
+        }
+        
+        .session-modal input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .session-modal input::placeholder {
+            color: #606060;
+        }
+        
+        body.light .session-modal input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .session-modal button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .session-modal button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .session-modal button:active {
+            transform: translateY(0);
+        }
+        
+        /* Modal per eliminazione sessione */
+        .session-delete-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .session-delete-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .session-delete-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+            padding: 30px 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        body.light .session-delete-modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+            border: 1px solid #d1d5db;
+        }
+        
+        .session-delete-modal-emoji {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+        
+        .session-delete-modal h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        body.light .session-delete-modal h2 {
+            color: #0f172a;
+        }
+        
+        .session-delete-modal p {
+            font-size: 15px;
+            color: #a0a0a0;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        
+        body.light .session-delete-modal p {
+            color: #64748b;
+        }
+        
+        .session-delete-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .session-delete-modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .session-delete-modal-cancel {
+            background: #353535;
+            color: #ffffff;
+        }
+        
+        body.light .session-delete-modal-cancel {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .session-delete-modal-cancel:hover {
+            background: #404040;
+        }
+        
+        body.light .session-delete-modal-cancel:hover {
+            background: #d1d5db;
+        }
+        
+        .session-delete-modal-confirm {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .session-delete-modal-confirm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+        
         .tabs {
             display: flex;
             background: #141414;
             padding: 6px;
             gap: 6px;
             border-bottom: 1px solid #2a2a2a;
+            position: relative;
         }
         
         .tab {
@@ -741,6 +977,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         
         .tab:hover {
@@ -752,6 +989,59 @@
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: #ffffff;
             box-shadow: 0 3px 8px rgba(99, 102, 241, 0.4);
+        }
+        
+        .tab-delete-btn {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .tab:hover .tab-delete-btn {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .tab-delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        
+        .add-session-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            margin-left: 6px;
+        }
+        
+        .add-session-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
         }
         
         .content {
@@ -1314,6 +1604,32 @@
         </div>
     </div>
     
+    <!-- Modal per nuova sessione -->
+    <div class="session-modal" id="sessionModal">
+        <div class="session-modal-content">
+            <div class="session-modal-emoji">➕</div>
+            <h2>Crea Nuova Sessione</h2>
+            <p>Inserisci il nome della nuova sessione di allenamento</p>
+            
+            <input type="text" id="newSessionName" placeholder="es. D" maxlength="20">
+            
+            <button class="session-modal-btn" onclick="createNewSession()">💾 Crea Sessione</button>
+        </div>
+    </div>
+    
+    <!-- Modal per eliminazione sessione -->
+    <div class="session-delete-modal" id="sessionDeleteModal">
+        <div class="session-delete-modal-content">
+            <div class="session-delete-modal-emoji">🗑️</div>
+            <h2>Conferma Eliminazione</h2>
+            <p id="sessionDeleteMessage">Sei sicuro di voler eliminare questa sessione?<br>Tutti gli esercizi verranno eliminati e questa azione non può essere annullata.</p>
+            <div class="session-delete-modal-buttons">
+                <button class="session-delete-modal-btn session-delete-modal-cancel" onclick="closeSessionDeleteModal()">Annulla</button>
+                <button class="session-delete-modal-btn session-delete-modal-confirm" id="confirmSessionDeleteBtn">Elimina</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="app-content" id="appContent">
         <div class="container">
         <div class="header">
@@ -1326,16 +1642,12 @@
             <div class="date"><span id="userName">Giulio Riso</span> - Data inizio: <span id="startDate">01/10/2025</span></div>
         </div>
         
-        <div class="tabs">
-            <button class="tab active" onclick="showSession('A')">Sessione A</button>
-            <button class="tab" onclick="showSession('B')">Sessione B</button>
-            <button class="tab" onclick="showSession('C')">Sessione C</button>
+        <div class="tabs" id="sessionTabs">
+            <!-- Le tab verranno generate dinamicamente -->
         </div>
         
-        <div class="content">
-            <div id="sessionA" class="session active"></div>
-            <div id="sessionB" class="session"></div>
-            <div id="sessionC" class="session"></div>
+        <div class="content" id="sessionContent">
+            <!-- Il contenuto delle sessioni verrà generato dinamicamente -->
             
             <button class="save-btn" onclick="saveWorkout()">💾 Salva Allenamento</button>
             <div id="savedMessage" class="saved-message">✅ Allenamento salvato con successo!</div>
@@ -1381,6 +1693,8 @@
         let editMode = false;
         let currentDeleteSession = null;
         let currentDeleteIndex = null;
+        let currentSessionToDelete = null;
+        let sessionOrder = ['A', 'B', 'C']; // Ordine delle sessioni
 
         function toggleEditMode() {
             editMode = !editMode;
@@ -1393,14 +1707,13 @@
                 btn.textContent = '✏️';
                 saveWorkoutData();
             }
-            renderSession('A');
-            renderSession('B');
-            renderSession('C');
+            renderAllSessions();
+            renderSessionTabs();
             
             // Mostra la sessione attiva corrente
             const activeTabs = document.querySelectorAll('.tab.active');
             if (activeTabs.length > 0) {
-                const activeSession = activeTabs[0].textContent.replace('Sessione ', '');
+                const activeSession = activeTabs[0].dataset.session;
                 document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
                 document.getElementById(`session${activeSession}`).classList.add('active');
             }
@@ -1447,10 +1760,25 @@
             const saved = localStorage.getItem('workoutData');
             if (saved) {
                 const savedData = JSON.parse(saved);
-                workoutData.A = savedData.A || workoutData.A;
-                workoutData.B = savedData.B || workoutData.B;
-                workoutData.C = savedData.C || workoutData.C;
+                // Carica tutte le sessioni salvate
+                Object.keys(savedData).forEach(session => {
+                    workoutData[session] = savedData[session];
+                });
+                
+                // Aggiorna l'ordine delle sessioni
+                sessionOrder = Object.keys(savedData);
             }
+        }
+
+        function loadSessionOrder() {
+            const saved = localStorage.getItem('sessionOrder');
+            if (saved) {
+                sessionOrder = JSON.parse(saved);
+            }
+        }
+
+        function saveSessionOrder() {
+            localStorage.setItem('sessionOrder', JSON.stringify(sessionOrder));
         }
 
         function loadUserData() {
@@ -1551,11 +1879,105 @@
             }, 2500);
         }
         
+        function openSessionModal() {
+            document.getElementById('sessionModal').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('newSessionName').focus();
+            }, 100);
+        }
+        
+        function createNewSession() {
+            const sessionNameInput = document.getElementById('newSessionName');
+            const sessionName = sessionNameInput.value.trim();
+            
+            if (!sessionName) {
+                sessionNameInput.style.borderColor = '#ef4444';
+                sessionNameInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    sessionNameInput.style.animation = '';
+                }, 500);
+                return;
+            }
+            
+            // Genera un ID univoco per la sessione
+            let sessionId = sessionName.replace(/\s+/g, '_').toUpperCase();
+            
+            // Se la sessione esiste già, aggiungi un numero
+            if (workoutData[sessionId]) {
+                let counter = 1;
+                while (workoutData[sessionId + '_' + counter]) {
+                    counter++;
+                }
+                sessionId = sessionId + '_' + counter;
+            }
+            
+            // Crea la nuova sessione
+            workoutData[sessionId] = [
+                { name: "Nuovo Esercizio", series: 3, reps: 10, recovery: "1'" }
+            ];
+            
+            // Aggiungi la sessione all'ordine
+            sessionOrder.push(sessionId);
+            
+            saveWorkoutData();
+            saveSessionOrder();
+            
+            // Chiudi il modal e resetta il campo
+            document.getElementById('sessionModal').classList.remove('show');
+            sessionNameInput.value = '';
+            
+            // Rendi la nuova sessione attiva
+            renderSessionTabs();
+            showSession(sessionId);
+        }
+        
+        function deleteSession(sessionId) {
+            currentSessionToDelete = sessionId;
+            document.getElementById('sessionDeleteMessage').textContent = 
+                `Sei sicuro di voler eliminare la sessione ${sessionId}?<br>Tutti gli esercizi verranno eliminati e questa azione non può essere annullata.`;
+            document.getElementById('sessionDeleteModal').classList.add('show');
+        }
+        
+        function confirmSessionDelete() {
+            if (currentSessionToDelete) {
+                // Elimina la sessione
+                delete workoutData[currentSessionToDelete];
+                
+                // Rimuovi la sessione dall'ordine
+                sessionOrder = sessionOrder.filter(s => s !== currentSessionToDelete);
+                
+                saveWorkoutData();
+                saveSessionOrder();
+                
+                // Se non ci sono più sessioni, crea una sessione predefinita
+                if (sessionOrder.length === 0) {
+                    sessionOrder = ['A'];
+                    workoutData.A = [
+                        { name: "Nuovo Esercizio", series: 3, reps: 10, recovery: "1'" }
+                    ];
+                    saveWorkoutData();
+                    saveSessionOrder();
+                }
+                
+                // Rendi attiva la prima sessione disponibile
+                renderSessionTabs();
+                showSession(sessionOrder[0]);
+                
+                closeSessionDeleteModal();
+            }
+        }
+        
+        function closeSessionDeleteModal() {
+            document.getElementById('sessionDeleteModal').classList.remove('show');
+            currentSessionToDelete = null;
+        }
+        
         // Permetti invio con Enter
         document.addEventListener('DOMContentLoaded', function() {
             const nameInput = document.getElementById('nameInput');
             const dateInput = document.getElementById('startDateInput');
             const newDateInput = document.getElementById('newStartDateInput');
+            const newSessionName = document.getElementById('newSessionName');
             
             if (nameInput) {
                 nameInput.addEventListener('keypress', function(e) {
@@ -1577,6 +1999,14 @@
                 newDateInput.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         saveNewStartDate();
+                    }
+                });
+            }
+            
+            if (newSessionName) {
+                newSessionName.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        createNewSession();
                     }
                 });
             }
@@ -1639,12 +2069,69 @@
             }
         }
 
-        function renderSession(session) {
-            const container = document.getElementById(`session${session}`);
+        function renderSessionTabs() {
+            const tabsContainer = document.getElementById('sessionTabs');
+            tabsContainer.innerHTML = '';
+            
+            sessionOrder.forEach(sessionId => {
+                const tab = document.createElement('button');
+                tab.className = 'tab';
+                tab.dataset.session = sessionId;
+                tab.textContent = `Sessione ${sessionId}`;
+                
+                if (editMode) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'tab-delete-btn';
+                    deleteBtn.textContent = '✕';
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteSession(sessionId);
+                    };
+                    tab.appendChild(deleteBtn);
+                }
+                
+                tab.onclick = () => showSession(sessionId);
+                
+                // Imposta la prima sessione come attiva
+                if (sessionOrder.indexOf(sessionId) === 0) {
+                    tab.classList.add('active');
+                }
+                
+                tabsContainer.appendChild(tab);
+            });
+            
+            // Aggiungi il pulsante per creare nuove sessioni solo in modalità modifica
+            if (editMode) {
+                const addBtn = document.createElement('button');
+                addBtn.className = 'add-session-btn';
+                addBtn.textContent = '+';
+                addBtn.title = 'Aggiungi nuova sessione';
+                addBtn.onclick = openSessionModal;
+                tabsContainer.appendChild(addBtn);
+            }
+        }
+
+        function renderAllSessions() {
+            sessionOrder.forEach(sessionId => {
+                renderSession(sessionId);
+            });
+        }
+
+        function renderSession(sessionId) {
+            let container = document.getElementById(`session${sessionId}`);
+            
+            // Se il container non esiste, crealo
+            if (!container) {
+                container = document.createElement('div');
+                container.id = `session${sessionId}`;
+                container.className = 'session';
+                document.getElementById('sessionContent').insertBefore(container, document.querySelector('.save-btn'));
+            }
+            
             container.innerHTML = '';
             
-            workoutData[session].forEach((exercise, index) => {
-                const exerciseId = `${session}-${index}`;
+            workoutData[sessionId].forEach((exercise, index) => {
+                const exerciseId = `${sessionId}-${index}`;
                 const savedWeight = savedWeights[exerciseId] || '';
                 
                 const exerciseDiv = document.createElement('div');
@@ -1657,22 +2144,22 @@
                                 type="text" 
                                 class="exercise-name-edit" 
                                 value="${exercise.name}"
-                                onchange="workoutData['${session}'][${index}].name = this.value; saveWorkoutData();"
+                                onchange="workoutData['${sessionId}'][${index}].name = this.value; saveWorkoutData();"
                             >
-                            <button class="delete-btn" onclick="deleteExercise('${session}', ${index})">🗑️</button>
+                            <button class="delete-btn" onclick="deleteExercise('${sessionId}', ${index})">🗑️</button>
                         </div>
                         <div class="exercise-info">
                             <div class="info-item">
                                 <div class="info-label">SERIE</div>
                                 <div class="number-input-container">
-                                    <button class="number-btn" onclick="decreaseSeries('${session}', ${index})">-</button>
+                                    <button class="number-btn" onclick="decreaseSeries('${sessionId}', ${index})">-</button>
                                     <input 
                                         type="number" 
                                         class="number-input" 
                                         value="${exercise.series}"
-                                        onchange="workoutData['${session}'][${index}].series = parseInt(this.value); saveWorkoutData();"
+                                        onchange="workoutData['${sessionId}'][${index}].series = parseInt(this.value); saveWorkoutData();"
                                     >
-                                    <button class="number-btn" onclick="increaseSeries('${session}', ${index})">+</button>
+                                    <button class="number-btn" onclick="increaseSeries('${sessionId}', ${index})">+</button>
                                 </div>
                             </div>
                             <div class="info-item">
@@ -1681,20 +2168,20 @@
                                     type="text" 
                                     class="info-value-edit" 
                                     value="${exercise.reps}"
-                                    onchange="workoutData['${session}'][${index}].reps = this.value; saveWorkoutData();"
+                                    onchange="workoutData['${sessionId}'][${index}].reps = this.value; saveWorkoutData();"
                                 >
                             </div>
                             <div class="info-item">
                                 <div class="info-label">RECUPERO</div>
                                 <div class="recovery-input-container">
-                                    <button class="recovery-btn" onclick="decreaseRecovery('${session}', ${index})">-</button>
+                                    <button class="recovery-btn" onclick="decreaseRecovery('${sessionId}', ${index})">-</button>
                                     <input 
                                         type="text" 
                                         class="recovery-input" 
                                         value="${exercise.recovery}"
-                                        onchange="workoutData['${session}'][${index}].recovery = this.value; saveWorkoutData();"
+                                        onchange="workoutData['${sessionId}'][${index}].recovery = this.value; saveWorkoutData();"
                                     >
-                                    <button class="recovery-btn" onclick="increaseRecovery('${session}', ${index})">+</button>
+                                    <button class="recovery-btn" onclick="increaseRecovery('${sessionId}', ${index})">+</button>
                                 </div>
                             </div>
                         </div>
@@ -1746,51 +2233,56 @@
                 const addBtn = document.createElement('button');
                 addBtn.className = 'add-exercise-btn';
                 addBtn.textContent = '➕ Aggiungi Esercizio';
-                addBtn.onclick = () => addExercise(session);
+                addBtn.onclick = () => addExercise(sessionId);
                 container.appendChild(addBtn);
             }
         }
 
-        function increaseSeries(session, index) {
-            workoutData[session][index].series += 1;
+        function increaseSeries(sessionId, index) {
+            workoutData[sessionId][index].series += 1;
             saveWorkoutData();
-            renderSession(session);
+            renderSession(sessionId);
         }
 
-        function decreaseSeries(session, index) {
-            if (workoutData[session][index].series > 1) {
-                workoutData[session][index].series -= 1;
+        function decreaseSeries(sessionId, index) {
+            if (workoutData[sessionId][index].series > 1) {
+                workoutData[sessionId][index].series -= 1;
                 saveWorkoutData();
-                renderSession(session);
+                renderSession(sessionId);
             }
         }
 
-        function increaseRecovery(session, index) {
-            const currentRecovery = workoutData[session][index].recovery;
+        function increaseRecovery(sessionId, index) {
+            const currentRecovery = workoutData[sessionId][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
             const newSeconds = currentSeconds + 15; // Aumenta di 15 secondi
-            workoutData[session][index].recovery = formatRecoveryTime(newSeconds);
+            workoutData[sessionId][index].recovery = formatRecoveryTime(newSeconds);
             saveWorkoutData();
-            renderSession(session);
+            renderSession(sessionId);
         }
 
-        function decreaseRecovery(session, index) {
-            const currentRecovery = workoutData[session][index].recovery;
+        function decreaseRecovery(sessionId, index) {
+            const currentRecovery = workoutData[sessionId][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
             if (currentSeconds > 15) { // Non scendere sotto i 15 secondi
                 const newSeconds = currentSeconds - 15; // Diminuisce di 15 secondi
-                workoutData[session][index].recovery = formatRecoveryTime(newSeconds);
+                workoutData[sessionId][index].recovery = formatRecoveryTime(newSeconds);
                 saveWorkoutData();
-                renderSession(session);
+                renderSession(sessionId);
             }
         }
 
-        function showSession(session) {
+        function showSession(sessionId) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
             
-            event.target.classList.add('active');
-            document.getElementById(`session${session}`).classList.add('active');
+            // Trova la tab corrispondente alla sessione e attivala
+            const targetTab = document.querySelector(`.tab[data-session="${sessionId}"]`);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            document.getElementById(`session${sessionId}`).classList.add('active');
         }
 
         function saveWorkout() {
@@ -1815,13 +2307,14 @@
         loadUserData();
         loadTheme();
         loadWorkoutData();
+        loadSessionOrder();
         loadSavedWeights();
-        renderSession('A');
-        renderSession('B');
-        renderSession('C');
+        renderSessionTabs();
+        renderAllSessions();
         
         // Imposta il gestore per il pulsante di conferma eliminazione
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+        document.getElementById('confirmSessionDeleteBtn').addEventListener('click', confirmSessionDelete);
     </script>
 </body>
 </html>
