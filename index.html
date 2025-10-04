@@ -2,8 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyWorkout - Il Tuo Personal Trainer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MyWorkout - Personal Trainer</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         
@@ -17,6 +20,8 @@
             --border-dark: #2a2a2a;
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
         }
         
         * {
@@ -24,19 +29,39 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
         }
         
         html {
             scroll-behavior: smooth;
+            height: 100%;
         }
         
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
             min-height: 100vh;
-            padding: 8px;
+            min-height: -webkit-fill-available;
+            padding: 0;
             line-height: 1.4;
             color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* Container principale con safe area */
+        .app-container {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            padding: 8px;
+            padding-top: max(8px, var(--safe-area-inset-top));
+            padding-bottom: max(8px, var(--safe-area-inset-bottom));
         }
         
         .container {
@@ -47,19 +72,22 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             border: 1px solid var(--border-dark);
+            position: relative;
         }
         
+        /* Header ottimizzato per mobile */
         .header {
             background: var(--primary-gradient);
             color: white;
-            padding: 24px 16px;
+            padding: 20px 16px;
             text-align: center;
             position: relative;
+            padding-top: max(20px, calc(16px + var(--safe-area-inset-top)));
         }
         
         .header-buttons {
             position: absolute;
-            top: 12px;
+            top: max(12px, calc(8px + var(--safe-area-inset-top)));
             right: 12px;
             display: flex;
             gap: 6px;
@@ -68,33 +96,35 @@
         .theme-toggle, .edit-toggle {
             background: rgba(255, 255, 255, 0.2);
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 18px;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
+            touch-action: manipulation;
         }
         
         .theme-toggle:active, .edit-toggle:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.3);
         }
         
         .edit-toggle.active {
-            background: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.4);
         }
         
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             margin-bottom: 6px;
             letter-spacing: -0.3px;
             line-height: 1.2;
-            padding: 0 40px;
+            padding: 0 50px;
         }
         
         .header .date {
@@ -149,7 +179,7 @@
             border: 1px solid var(--border-dark);
         }
         
-        /* Welcome Screen */
+        /* Welcome Screen fullscreen mobile */
         .welcome-screen {
             display: none;
             position: fixed;
@@ -157,11 +187,14 @@
             left: 0;
             width: 100%;
             height: 100%;
+            height: -webkit-fill-available;
             background: var(--bg-dark);
             z-index: 10000;
             align-items: center;
             justify-content: center;
             padding: 16px;
+            padding-top: max(16px, var(--safe-area-inset-top));
+            padding-bottom: max(16px, var(--safe-area-inset-bottom));
         }
         
         .welcome-screen.show {
@@ -171,13 +204,15 @@
         .welcome-card {
             background: var(--bg-card);
             border-radius: 20px;
-            padding: 32px 24px;
+            padding: 28px 20px;
             max-width: 100%;
             width: 100%;
             text-align: center;
             border: 1px solid var(--border-dark);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         @keyframes slideUp {
@@ -192,8 +227,8 @@
         }
         
         .welcome-emoji {
-            font-size: 64px;
-            margin-bottom: 20px;
+            font-size: 56px;
+            margin-bottom: 16px;
             display: inline-block;
             animation: bounce 2s ease-in-out infinite;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
@@ -201,40 +236,40 @@
         
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-6px); }
         }
         
         .welcome-card h1 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             color: var(--text-primary);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             letter-spacing: -0.3px;
         }
         
         .welcome-card p {
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 28px;
-            line-height: 1.5;
+            margin-bottom: 24px;
+            line-height: 1.4;
         }
         
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         
         .input-group label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-align: left;
         }
         
         .input-group input {
             width: 100%;
-            padding: 16px;
+            padding: 16px 14px;
             border: 2px solid var(--border-dark);
             border-radius: 12px;
             font-size: 16px;
@@ -243,6 +278,7 @@
             font-weight: 500;
             transition: all 0.2s ease;
             -webkit-appearance: none;
+            min-height: 48px;
         }
         
         .input-group input:focus {
@@ -269,10 +305,12 @@
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             margin-top: 8px;
+            min-height: 52px;
+            touch-action: manipulation;
         }
         
         .welcome-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
         
@@ -284,7 +322,7 @@
             display: block;
         }
         
-        /* Modal Conferma Eliminazione */
+        /* Modal Conferma Eliminazione mobile-optimized */
         .confirm-modal {
             display: none;
             position: fixed;
@@ -292,12 +330,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            height: -webkit-fill-available;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
             padding: 16px;
+            padding-top: max(16px, var(--safe-area-inset-top));
+            padding-bottom: max(16px, var(--safe-area-inset-bottom));
         }
         
         .confirm-modal.show {
@@ -307,18 +348,18 @@
         
         .confirm-modal-content {
             background: var(--bg-card);
-            padding: 24px;
-            border-radius: 16px;
+            padding: 24px 20px;
+            border-radius: 18px;
             text-align: center;
             max-width: 100%;
             width: 100%;
             border: 1px solid var(--border-dark);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             animation: scaleIn 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         .confirm-modal-icon {
-            font-size: 48px;
+            font-size: 44px;
             margin-bottom: 12px;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
@@ -328,6 +369,7 @@
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 8px;
+            line-height: 1.2;
         }
         
         .confirm-modal p {
@@ -344,19 +386,25 @@
         
         .confirm-btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px 12px;
             border: none;
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 44px;
+            transition: all 0.15s ease;
+            min-height: 48px;
+            touch-action: manipulation;
         }
         
         .confirm-btn-cancel {
             background: var(--bg-element);
             color: var(--text-primary);
+        }
+        
+        .confirm-btn-cancel:active {
+            transform: scale(0.96);
+            background: var(--border-dark);
         }
         
         .confirm-btn-delete {
@@ -365,20 +413,22 @@
             box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
         
-        .confirm-btn:active {
-            transform: scale(0.98);
+        .confirm-btn-delete:active {
+            transform: scale(0.96);
+            box-shadow: 0 1px 6px rgba(239, 68, 68, 0.4);
         }
         
-        /* Tabs migliorati */
+        /* Tabs ultra-ottimizzati per mobile */
         .tabs {
             display: flex;
             background: #141414;
-            padding: 6px;
-            gap: 4px;
+            padding: 6px 4px;
+            gap: 3px;
             border-bottom: 1px solid var(--border-dark);
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
         }
         
         body.light .tabs {
@@ -391,22 +441,28 @@
         
         .tab {
             flex: 1;
-            padding: 12px 8px;
+            padding: 12px 6px;
             text-align: center;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             border: none;
             background: transparent;
             color: #808080;
             border-radius: 10px;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             min-width: 0;
             white-space: nowrap;
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+        
+        .tab:active {
+            transform: scale(0.98);
         }
         
         .tab.active {
@@ -416,7 +472,8 @@
         }
         
         .content {
-            padding: 20px 16px;
+            padding: 16px 12px;
+            padding-bottom: max(16px, calc(12px + var(--safe-area-inset-bottom)));
         }
         
         .session {
@@ -425,33 +482,36 @@
         
         .session.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.25s ease;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
+        /* Esercizi ottimizzati per touch */
         .exercise {
             background: var(--bg-element);
             border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
             border: 1px solid var(--border-dark);
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             position: relative;
+            touch-action: manipulation;
         }
         
         .exercise:active {
-            transform: scale(0.998);
+            transform: scale(0.995);
+            background: var(--bg-card);
         }
         
         .exercise-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             line-height: 1.3;
             word-break: break-word;
         }
@@ -461,12 +521,13 @@
             padding: 12px;
             border: 2px solid var(--border-dark);
             border-radius: 10px;
-            font-size: 15px;
+            font-size: 14px;
             background: var(--bg-card);
             color: var(--text-primary);
             font-weight: 600;
-            margin-bottom: 14px;
-            transition: all 0.2s ease;
+            margin-bottom: 12px;
+            transition: all 0.15s ease;
+            min-height: 44px;
         }
         
         .exercise-name-edit:focus {
@@ -478,8 +539,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 14px;
-            gap: 10px;
+            margin-bottom: 12px;
+            gap: 8px;
         }
         
         .delete-btn {
@@ -490,26 +551,27 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             flex-shrink: 0;
             min-width: 44px;
             min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
         }
         
         .delete-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
             background: #dc2626;
         }
         
         .exercise-info {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 14px;
-            padding: 14px;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
             background: var(--bg-card);
             border-radius: 10px;
         }
@@ -519,16 +581,16 @@
         }
         
         .info-label {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-secondary);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: 700;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
         
         .info-value {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             color: #a78bfa;
         }
@@ -537,20 +599,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
         }
         
         .number-input, .recovery-input {
-            width: 50px;
-            padding: 8px 4px;
+            width: 46px;
+            padding: 8px 2px;
             border: 2px solid var(--border-dark);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             background: var(--bg-element);
             color: var(--text-primary);
             font-weight: 700;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+            min-height: 36px;
         }
         
         .number-input:focus, .recovery-input:focus {
@@ -562,21 +625,22 @@
             background: var(--bg-element);
             color: var(--text-primary);
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            min-width: 32px;
+            transition: all 0.15s ease;
+            min-width: 30px;
+            touch-action: manipulation;
         }
         
         .number-btn:active, .recovery-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
             background: var(--border-dark);
         }
         
@@ -585,12 +649,13 @@
             padding: 8px;
             border: 2px solid var(--border-dark);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             background: var(--bg-element);
             color: var(--text-primary);
             font-weight: 600;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+            min-height: 36px;
         }
         
         .info-value-edit:focus {
@@ -602,47 +667,48 @@
             background: var(--success-gradient);
             color: white;
             border: none;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
+            margin-bottom: 10px;
+            transition: all 0.15s ease;
             box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-            min-height: 44px;
+            min-height: 48px;
+            touch-action: manipulation;
         }
         
         .add-exercise-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow: 0 1px 6px rgba(16, 185, 129, 0.4);
         }
         
         .weight-input {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
         
         .weight-input label {
             font-weight: 600;
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             white-space: nowrap;
             flex-shrink: 0;
         }
         
         .weight-input input {
             flex: 1;
-            padding: 14px 12px;
+            padding: 12px;
             border: 2px solid var(--border-dark);
             border-radius: 10px;
-            font-size: 15px;
+            font-size: 14px;
             background: var(--bg-card);
             color: var(--text-primary);
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             min-height: 44px;
         }
         
@@ -655,7 +721,7 @@
         .weight-input span {
             font-weight: 700;
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             white-space: nowrap;
             flex-shrink: 0;
         }
@@ -664,43 +730,44 @@
             background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 18px;
+            padding: 16px;
             border-radius: 14px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 20px;
-            transition: all 0.2s ease;
+            margin-top: 16px;
+            transition: all 0.15s ease;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            min-height: 44px;
+            min-height: 52px;
             position: relative;
             overflow: hidden;
+            touch-action: manipulation;
         }
         
         .save-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
             box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
         }
         
         .saved-message {
             background: var(--success-gradient);
             color: #ffffff;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             text-align: center;
-            margin-top: 16px;
+            margin-top: 14px;
             display: none;
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-            font-size: 14px;
-            animation: slideIn 0.3s ease;
+            font-size: 13px;
+            animation: slideIn 0.25s ease;
         }
         
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(8px);
             }
             to {
                 opacity: 1;
@@ -712,11 +779,10 @@
             display: block;
         }
 
-        /* Miglioramenti specifici per mobile */
-        @media (max-width: 768px) {
-            body {
+        /* Miglioramenti specifici per mobile small */
+        @media (max-width: 380px) {
+            .app-container {
                 padding: 6px;
-                -webkit-text-size-adjust: 100%;
             }
             
             .container {
@@ -724,109 +790,68 @@
             }
             
             .header {
-                padding: 20px 12px;
+                padding: 16px 12px;
+                padding-top: max(16px, calc(12px + var(--safe-area-inset-top)));
             }
             
             .header h1 {
-                font-size: 18px;
-                padding: 0 30px;
+                font-size: 16px;
+                padding: 0 40px;
             }
             
             .header .date {
-                font-size: 12px;
+                font-size: 11px;
             }
             
             .header-buttons {
-                top: 10px;
+                top: max(10px, calc(6px + var(--safe-area-inset-top)));
                 right: 10px;
             }
             
             .theme-toggle, .edit-toggle {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 font-size: 16px;
             }
             
             .content {
-                padding: 16px 12px;
+                padding: 14px 10px;
             }
             
             .exercise {
-                padding: 16px;
-                margin-bottom: 10px;
+                padding: 14px;
+                margin-bottom: 8px;
             }
             
             .exercise-info {
                 grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 12px;
+                gap: 10px;
+                padding: 10px;
             }
             
             .exercise-name {
-                font-size: 14px;
+                font-size: 13px;
             }
             
             .weight-input {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 6px;
             }
             
             .weight-input label {
                 text-align: center;
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .tabs {
-                padding: 4px;
+                padding: 4px 3px;
             }
             
             .tab {
-                padding: 10px 6px;
-                font-size: 12px;
-                min-height: 40px;
-            }
-            
-            .welcome-card {
-                padding: 28px 20px;
-            }
-            
-            .welcome-emoji {
-                font-size: 56px;
-            }
-            
-            .welcome-card h1 {
-                font-size: 22px;
-            }
-            
-            .input-group input {
-                padding: 14px;
-                font-size: 16px;
-            }
-            
-            /* Miglioramenti touch */
-            button, input, .tab {
-                touch-action: manipulation;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .header h1 {
-                font-size: 16px;
-                padding: 0 20px;
-            }
-            
-            .exercise-name {
-                font-size: 13px;
-            }
-            
-            .info-value {
-                font-size: 14px;
-            }
-            
-            .tab {
+                padding: 10px 4px;
                 font-size: 11px;
-                padding: 8px 4px;
+                min-height: 40px;
             }
             
             .welcome-card {
@@ -840,91 +865,113 @@
             .welcome-card h1 {
                 font-size: 20px;
             }
-        }
-
-        /* Supporto per dispositivi con notch */
-        @supports(padding: max(0px)) {
-            .header, .content {
-                padding-left: max(16px, env(safe-area-inset-left));
-                padding-right: max(16px, env(safe-area-inset-right));
+            
+            .input-group input {
+                padding: 14px 12px;
+                font-size: 16px;
             }
         }
 
-        /* Ottimizzazioni prestazioni */
-        .exercise, .tab, button {
+        /* Supporto avanzato per dispositivi con notch e home indicator */
+        @supports(padding: max(0px)) {
+            .header, .content, .welcome-screen, .confirm-modal {
+                padding-left: max(12px, env(safe-area-inset-left));
+                padding-right: max(12px, env(safe-area-inset-right));
+            }
+        }
+
+        /* Prevenire zoom su iOS per input */
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Ottimizzazioni prestazioni avanzate */
+        .exercise, .tab, button, .theme-toggle, .edit-toggle {
             will-change: transform;
+            transform: translateZ(0);
+        }
+
+        /* Scroll personalizzato leggero */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
         }
     </style>
 </head>
 <body>
-    <div class="welcome-screen" id="welcomeScreen">
-        <div class="welcome-card">
-            <div class="welcome-emoji">💪</div>
-            <h1>Inizia il Tuo Allenamento!</h1>
-            <p>Crea il tuo programma personalizzato e raggiungi i tuoi obiettivi fitness</p>
-            
-            <div class="input-group">
-                <label for="nameInput">Il Tuo Nome</label>
-                <input type="text" id="nameInput" placeholder="Come ti chiami?" maxlength="30" autocapitalize="words">
+    <div class="app-container">
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="welcome-emoji">💪</div>
+                <h1>Inizia il Tuo Allenamento!</h1>
+                <p>Crea il tuo programma personalizzato e raggiungi i tuoi obiettivi fitness</p>
+                
+                <div class="input-group">
+                    <label for="nameInput">Il Tuo Nome</label>
+                    <input type="text" id="nameInput" placeholder="Come ti chiami?" maxlength="30" autocapitalize="words">
+                </div>
+                
+                <div class="input-group">
+                    <label for="startDateInput">Data di Inizio</label>
+                    <input type="date" id="startDateInput">
+                </div>
+                
+                <button class="welcome-btn" onclick="saveUserData()">
+                    🚀 Inizia Ora!
+                </button>
             </div>
-            
-            <div class="input-group">
-                <label for="startDateInput">Data di Inizio</label>
-                <input type="date" id="startDateInput">
-            </div>
-            
-            <button class="welcome-btn" onclick="saveUserData()">
-                🚀 Inizia Ora!
-            </button>
-        </div>
-    </div>
-    
-    <!-- Modal Conferma Eliminazione -->
-    <div class="confirm-modal" id="confirmModal">
-        <div class="confirm-modal-content">
-            <div class="confirm-modal-icon">⚠️</div>
-            <h3>Conferma Eliminazione</h3>
-            <p>Sei sicuro di voler eliminare questo esercizio? Questa azione non può essere annullata.</p>
-            <div class="confirm-modal-buttons">
-                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
-                <button class="confirm-btn confirm-btn-delete" id="confirmDeleteBtn">Elimina</button>
-            </div>
-        </div>
-    </div>
-    
-    <div class="app-content" id="appContent">
-        <div class="container">
-        <div class="header">
-            <div class="header-buttons">
-                <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()" title="Modalità modifica">✏️</button>
-                <button class="theme-toggle" onclick="toggleTheme()" title="Cambia tema">🌙</button>
-            </div>
-            <h1>💪 Programma Allenamento</h1>
-            <div class="date"><span id="userName">Giulio Riso</span> - Iniziato: <span id="startDate">01/10/2025</span></div>
         </div>
         
-        <div class="tabs">
-            <button class="tab active" onclick="showSession('A')">Sessione A</button>
-            <button class="tab" onclick="showSession('B')">Sessione B</button>
-            <button class="tab" onclick="showSession('C')">Sessione C</button>
-        </div>
-        
-        <div class="content">
-            <div id="sessionA" class="session active"></div>
-            <div id="sessionB" class="session"></div>
-            <div id="sessionC" class="session"></div>
-            
-            <button class="save-btn" onclick="saveWorkout()">
-                💾 Salva Progressi
-            </button>
-            <div id="savedMessage" class="saved-message">
-                ✅ Allenamento salvato con successo!
+        <!-- Modal Conferma Eliminazione -->
+        <div class="confirm-modal" id="confirmModal">
+            <div class="confirm-modal-content">
+                <div class="confirm-modal-icon">⚠️</div>
+                <h3>Conferma Eliminazione</h3>
+                <p>Sei sicuro di voler eliminare questo esercizio? Questa azione non può essere annullata.</p>
+                <div class="confirm-modal-buttons">
+                    <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
+                    <button class="confirm-btn confirm-btn-delete" id="confirmDeleteBtn">Elimina</button>
+                </div>
             </div>
         </div>
-    </div>
+        
+        <div class="app-content" id="appContent">
+            <div class="container">
+                <div class="header">
+                    <div class="header-buttons">
+                        <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()" title="Modalità modifica">✏️</button>
+                        <button class="theme-toggle" onclick="toggleTheme()" title="Cambia tema">🌙</button>
+                    </div>
+                    <h1>💪 Programma Allenamento</h1>
+                    <div class="date"><span id="userName">Giulio Riso</span> - Iniziato: <span id="startDate">01/10/2025</span></div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showSession('A')">Sessione A</button>
+                    <button class="tab" onclick="showSession('B')">Sessione B</button>
+                    <button class="tab" onclick="showSession('C')">Sessione C</button>
+                </div>
+                
+                <div class="content">
+                    <div id="sessionA" class="session active"></div>
+                    <div id="sessionB" class="session"></div>
+                    <div id="sessionC" class="session"></div>
+                    
+                    <button class="save-btn" onclick="saveWorkout()">
+                        💾 Salva Progressi
+                    </button>
+                    <div id="savedMessage" class="saved-message">
+                        ✅ Allenamento salvato con successo!
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
+        // JavaScript identico alla versione precedente ma con ottimizzazioni mobile
         const workoutData = {
             A: [
                 { name: "Lat presa neutra stretta", series: 4, reps: 8, recovery: "2'" },
@@ -963,7 +1010,20 @@
         let currentDeleteSession = null;
         let currentDeleteIndex = null;
 
-        function toggleEditMode() {
+        // Debounce per prevenire multiple chiamate
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const toggleEditMode = debounce(function() {
             editMode = !editMode;
             const btn = document.getElementById('editToggle');
             if (editMode) {
@@ -984,7 +1044,7 @@
                 document.querySelectorAll('.session').forEach(s => s.classList.remove('active'));
                 document.getElementById(`session${activeSession}`).classList.add('active');
             }
-        }
+        }, 150);
 
         function deleteExercise(session, index) {
             currentDeleteSession = session;
@@ -1282,30 +1342,30 @@
             }
         }
 
-        function increaseSeries(session, index) {
+        const increaseSeries = debounce(function(session, index) {
             workoutData[session][index].series += 1;
             saveWorkoutData();
             renderSession(session);
-        }
+        }, 100);
 
-        function decreaseSeries(session, index) {
+        const decreaseSeries = debounce(function(session, index) {
             if (workoutData[session][index].series > 1) {
                 workoutData[session][index].series -= 1;
                 saveWorkoutData();
                 renderSession(session);
             }
-        }
+        }, 100);
 
-        function increaseRecovery(session, index) {
+        const increaseRecovery = debounce(function(session, index) {
             const currentRecovery = workoutData[session][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
             const newSeconds = currentSeconds + 15;
             workoutData[session][index].recovery = formatRecoveryTime(newSeconds);
             saveWorkoutData();
             renderSession(session);
-        }
+        }, 100);
 
-        function decreaseRecovery(session, index) {
+        const decreaseRecovery = debounce(function(session, index) {
             const currentRecovery = workoutData[session][index].recovery;
             const currentSeconds = parseRecoveryTime(currentRecovery);
             if (currentSeconds > 15) {
@@ -1314,7 +1374,7 @@
                 saveWorkoutData();
                 renderSession(session);
             }
-        }
+        }, 100);
 
         function showSession(session) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -1353,6 +1413,11 @@
         
         // Imposta il gestore per il pulsante di conferma eliminazione
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+
+        // Previeni il refresh su swipe
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
     </script>
 </body>
 </html>
