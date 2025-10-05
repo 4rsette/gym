@@ -2,10 +2,20 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#6366f1">
+
+    <!-- AGGIUNGI QUESTI META TAG PER DISABILITARE LO ZOOM -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MyWorkout">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="handheldfriendly" content="true">
+    <meta name="format-detection" content="telephone=no">
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon.png">
@@ -14,6 +24,44 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         
+        /* AGGIUNGI QUESTE REGOLE CSS PER DISABILITARE LO ZOOM */
+        html, body {
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+            overflow: hidden;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+        }
+        
+        /* DISABILITA ZOOM SU INPUT E TEXTAREA */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+            font-size: 16px !important; /* Previene lo zoom automatico su iOS */
+        }
+        
+        /* REGOLE ORIGINALI DEL TUO CODICE */
         * {
             margin: 0;
             padding: 0;
@@ -1653,6 +1701,53 @@
     </div>
 
     <script>
+        // AGGIUNGI QUESTE FUNZIONI JAVASCRIPT PER DISABILITARE LO ZOOM
+        function disableZoom() {
+            // Disabilita zoom con Ctrl + scroll
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { passive: false });
+
+            // Disabilita shortcut da tastiera (Ctrl + +, Ctrl + -, Ctrl + 0)
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && 
+                    (e.key === '+' || e.key === '-' || e.key === '=' || 
+                     e.keyCode === 187 || e.keyCode === 189 || 
+                     e.keyCode === 48 || e.key === '0')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // Disabilita doppio tap per zoom su mobile
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(e) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                    return false;
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
+
+            // Disabilita gesture di pinch-to-zoom
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            document.addEventListener('gesturechange', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            document.addEventListener('gestureend', function(e) {
+                e.preventDefault();
+                return false;
+            });
+        }
+
         // Database di esercizi casuali
         const exerciseDatabase = [
             { name: "Panca piana", series: 4, reps: 8, recovery: "2'" },
@@ -2375,66 +2470,68 @@
 
 
         // Funzione per convertire automaticamente in maiuscolo SOLO per le reps
-function setupUppercaseRepsInputs() {
-    document.addEventListener('input', function(e) {
-        // Controlla se è un input delle REPS
-        if (e.target.classList.contains('info-value-edit')) {
-            const infoLabel = e.target.parentElement.querySelector('.info-label');
-            if (infoLabel && infoLabel.textContent === 'REPS') {
-                e.target.value = e.target.value.toUpperCase();
-                
-                // Aggiorna anche i dati nel workoutData
-                const exerciseElement = e.target.closest('.exercise');
-                if (exerciseElement) {
-                    const sessionElement = exerciseElement.closest('.session');
-                    if (sessionElement) {
-                        const sessionId = sessionElement.id.replace('session', '');
-                        const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+        function setupUppercaseRepsInputs() {
+            document.addEventListener('input', function(e) {
+                // Controlla se è un input delle REPS
+                if (e.target.classList.contains('info-value-edit')) {
+                    const infoLabel = e.target.parentElement.querySelector('.info-label');
+                    if (infoLabel && infoLabel.textContent === 'REPS') {
+                        e.target.value = e.target.value.toUpperCase();
                         
-                        if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
-                            workoutData[sessionId][exerciseIndex].reps = e.target.value.toUpperCase();
-                            saveWorkoutData();
+                        // Aggiorna anche i dati nel workoutData
+                        const exerciseElement = e.target.closest('.exercise');
+                        if (exerciseElement) {
+                            const sessionElement = exerciseElement.closest('.session');
+                            if (sessionElement) {
+                                const sessionId = sessionElement.id.replace('session', '');
+                                const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+                                
+                                if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
+                                    workoutData[sessionId][exerciseIndex].reps = e.target.value.toUpperCase();
+                                    saveWorkoutData();
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         }
-    });
-}
-// Funzione per mettere la prima lettera maiuscola nei nomi degli esercizi
-function setupCapitalizeExerciseNames() {
-    document.addEventListener('input', function(e) {
-        // Controlla se è un input del nome dell'esercizio
-        if (e.target.classList.contains('exercise-name-edit')) {
-            const value = e.target.value;
-            if (value.length > 0) {
-                e.target.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-                
-                // Aggiorna anche i dati nel workoutData
-                const exerciseElement = e.target.closest('.exercise');
-                if (exerciseElement) {
-                    const sessionElement = exerciseElement.closest('.session');
-                    if (sessionElement) {
-                        const sessionId = sessionElement.id.replace('session', '');
-                        const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+        
+        // Funzione per mettere la prima lettera maiuscola nei nomi degli esercizi
+        function setupCapitalizeExerciseNames() {
+            document.addEventListener('input', function(e) {
+                // Controlla se è un input del nome dell'esercizio
+                if (e.target.classList.contains('exercise-name-edit')) {
+                    const value = e.target.value;
+                    if (value.length > 0) {
+                        e.target.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
                         
-                        if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
-                            workoutData[sessionId][exerciseIndex].name = e.target.value;
-                            saveWorkoutData();
+                        // Aggiorna anche i dati nel workoutData
+                        const exerciseElement = e.target.closest('.exercise');
+                        if (exerciseElement) {
+                            const sessionElement = exerciseElement.closest('.session');
+                            if (sessionElement) {
+                                const sessionId = sessionElement.id.replace('session', '');
+                                const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+                                
+                                if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
+                                    workoutData[sessionId][exerciseIndex].name = e.target.value;
+                                    saveWorkoutData();
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         }
-    });
-}
 
 
         // Inizializzazione
         loadUserData();
         loadTheme();
-        setupUppercaseRepsInputs(); // Aggiungi questa riga
-        setupCapitalizeExerciseNames(); // Aggiungi questa riga (prima maiuscola es)
+        disableZoom(); // AGGIUNGI QUESTA RIGA PER DISABILITARE LO ZOOM
+        setupUppercaseRepsInputs();
+        setupCapitalizeExerciseNames();
         
         // Imposta il gestore per il pulsante di conferma eliminazione
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
