@@ -2,17 +2,11 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#6366f1">
-
-    <!-- AGGIUNGI QUESTI META TAG PER DISABILITARE LO ZOOM -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#6366f1">
     <meta name="apple-mobile-web-app-title" content="MyWorkout">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="handheldfriendly" content="true">
     <meta name="format-detection" content="telephone=no">
@@ -24,11 +18,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
         
-        /* AGGIUNGI QUESTE REGOLE CSS PER DISABILITARE LO ZOOM */
+        /* REGOLE CSS MIGLIORATE PER IPHONE E TASTIERA */
         html, body {
-            touch-action: manipulation;
-            -ms-touch-action: manipulation;
-            overflow: hidden;
+            touch-action: pan-y pan-x;
+            -ms-touch-action: pan-y pan-x;
+            overflow: auto;
             height: 100%;
             margin: 0;
             padding: 0;
@@ -39,6 +33,8 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            /* PADDING PER NOTCH IPHONE */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
         
         * {
@@ -48,26 +44,32 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            touch-action: manipulation;
-            -ms-touch-action: manipulation;
+            touch-action: pan-y pan-x;
+            -ms-touch-action: pan-y pan-x;
+            box-sizing: border-box;
         }
         
-        /* DISABILITA ZOOM SU INPUT E TEXTAREA */
+        /* MIGLIORAMENTO INPUT PER TASTIERA TOUCH */
         input, textarea {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
             user-select: text;
-            font-size: 16px !important; /* Previene lo zoom automatico su iOS */
+            font-size: 16px !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0;
+        }
+        
+        /* DISABILITA ZOOM SU FOCUS INPUT SU iOS */
+        @media screen and (max-width: 768px) {
+            input, textarea, select {
+                font-size: 16px !important;
+            }
         }
         
         /* REGOLE ORIGINALI DEL TUO CODICE */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
             font-family: 'Inter', sans-serif;
             background: #0f0f0f;
@@ -88,19 +90,104 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             border: 1px solid #2a2a2a;
+            /* MARGINE PER NOTCH */
+            margin-top: max(0px, env(safe-area-inset-top));
+            margin-bottom: max(0px, env(safe-area-inset-bottom));
         }
-        
+
+        /* MIGLIORAMENTO HEADER PER NOTCH */
         .header {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
             padding: 25px 20px;
             text-align: center;
             position: relative;
+            /* PADDING SUPERIORE PER NOTCH */
+            padding-top: max(25px, calc(20px + env(safe-area-inset-top)));
         }
-        
+
+        /* MIGLIORAMENTO PULSANTE FISSO PER NOTCH */
+        .edit-toggle-fixed {
+            position: fixed;
+            bottom: max(20px, calc(15px + env(safe-area-inset-bottom)));
+            right: max(20px, calc(15px + env(safe-area-inset-right)));
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            z-index: 1000;
+        }
+
+        /* MIGLIORAMENTO MODAL PER TASTIERA */
+        .session-modal, .date-modal, .confirm-modal, .session-delete-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            /* PADDING PER NOTCH E TASTIERA */
+            padding: max(15px, env(safe-area-inset-top)) max(15px, env(safe-area-inset-right)) max(15px, env(safe-area-inset-bottom)) max(15px, env(safe-area-inset-left));
+        }
+
+        .session-modal.show, .date-modal.show, .confirm-modal.show, .session-delete-modal.show {
+            display: flex;
+        }
+
+        .session-modal-content, .date-modal-content, .confirm-modal-content, .session-delete-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+            padding: 30px 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 100%;
+            width: 100%;
+            border: 1px solid #3a3a3a;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease-out;
+            /* MARGINE INFERIORE PER TASTIERA */
+            margin-bottom: max(0px, env(safe-area-inset-bottom));
+        }
+
+        /* MIGLIORAMENTO INPUT PER TASTIERA TOUCH */
+        .input-group input, .date-modal input, .session-modal input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #353535;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #242424;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* MIGLIORAMENTO CONTENUTO PRINCIPALE */
+        .content {
+            padding: 20px;
+            /* PADDING INFERIORE PER TASTIERA */
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
         .header-buttons {
             position: absolute;
-            top: 15px;
+            top: max(15px, calc(10px + env(safe-area-inset-top)));
             right: 15px;
             display: flex;
             gap: 8px;
@@ -128,8 +215,8 @@
         /* PULSANTE MATITA FISSO IN BASSO A DESTRA */
         .edit-toggle-fixed {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: max(20px, calc(15px + env(safe-area-inset-bottom)));
+            right: max(20px, calc(15px + env(safe-area-inset-right)));
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             border: none;
             width: 60px;
@@ -1415,6 +1502,7 @@
             
             .header {
                 padding: 20px 15px;
+                padding-top: max(20px, calc(15px + env(safe-area-inset-top)));
             }
             
             .header h1 {
@@ -1427,7 +1515,7 @@
             }
             
             .header-buttons {
-                top: 12px;
+                top: max(12px, calc(8px + env(safe-area-inset-top)));
                 right: 12px;
             }
             
@@ -1439,8 +1527,8 @@
             
             /* PULSANTE MATITA MOBILE */
             .edit-toggle-fixed {
-                bottom: 15px;
-                right: 15px;
+                bottom: max(15px, calc(10px + env(safe-area-inset-bottom)));
+                right: max(15px, calc(10px + env(safe-area-inset-right)));
                 width: 56px;
                 height: 56px;
                 font-size: 22px;
@@ -1448,6 +1536,7 @@
             
             .content {
                 padding: 15px;
+                padding-bottom: max(15px, env(safe-area-inset-bottom));
             }
             
             .exercise {
@@ -1557,8 +1646,8 @@
             }
             
             .edit-toggle-fixed {
-                bottom: 12px;
-                right: 12px;
+                bottom: max(12px, calc(8px + env(safe-area-inset-bottom)));
+                right: max(12px, calc(8px + env(safe-area-inset-right)));
                 width: 52px;
                 height: 52px;
                 font-size: 20px;
@@ -1578,6 +1667,7 @@
             
             .header {
                 padding: 40px;
+                padding-top: max(40px, calc(35px + env(safe-area-inset-top)));
             }
             
             .header h1 {
@@ -1586,6 +1676,7 @@
             
             .content {
                 padding: 32px;
+                padding-bottom: max(32px, env(safe-area-inset-bottom));
             }
             
             .exercise {
@@ -1598,21 +1689,6 @@
                 padding: 16px;
             }
         }
-
-        html, body {
-    touch-action: pan-y pan-x;
-    -ms-touch-action: pan-y pan-x;
-    overflow: auto;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-
-* {
-    touch-action: pan-y pan-x;
-    -ms-touch-action: pan-y pan-x;
-}
-
-
     </style>
 </head>
 <body>
@@ -1716,6 +1792,61 @@
     </div>
 
     <script>
+        // FUNZIONE MIGLIORATA PER GESTIRE TASTIERA E NOTCH
+        function setupKeyboardHandling() {
+            // Rileva quando la tastiera viene aperta
+            window.addEventListener('resize', function() {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                    // Scrolla l'elemento attivo nella vista
+                    setTimeout(() => {
+                        document.activeElement.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center',
+                            inline: 'nearest'
+                        });
+                    }, 300);
+                }
+            });
+
+            // Previeni il zoom automatico su iOS
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(e) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
+        }
+
+        // FUNZIONE PER GESTIRE SAFE AREAS
+        function setupSafeAreas() {
+            // Applica i padding safe-area dinamicamente
+            const style = document.createElement('style');
+            style.textContent = `
+                .safe-area-padding {
+                    padding-top: env(safe-area-inset-top);
+                    padding-right: env(safe-area-inset-right);
+                    padding-bottom: env(safe-area-inset-bottom);
+                    padding-left: env(safe-area-inset-left);
+                }
+                
+                .safe-area-margin {
+                    margin-top: env(safe-area-inset-top);
+                    margin-right: env(safe-area-inset-right);
+                    margin-bottom: env(safe-area-inset-bottom);
+                    margin-left: env(safe-area-inset-left);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         // AGGIUNGI QUESTE FUNZIONI JAVASCRIPT PER DISABILITARE LO ZOOM
         function disableZoom() {
             // Disabilita zoom con Ctrl + scroll
@@ -2483,7 +2614,6 @@
             }, 2500);
         }
 
-
         // Funzione per convertire automaticamente in maiuscolo SOLO per le reps
         function setupUppercaseRepsInputs() {
             document.addEventListener('input', function(e) {
@@ -2540,17 +2670,22 @@
             });
         }
 
+        // MODIFICA ALLA FUNZIONE DI INIZIALIZZAZIONE
+        function initApp() {
+            loadUserData();
+            loadTheme();
+            disableZoom();
+            setupUppercaseRepsInputs();
+            setupCapitalizeExerciseNames();
+            setupKeyboardHandling();
+            setupSafeAreas();
+            
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+            document.getElementById('confirmSessionDeleteBtn').addEventListener('click', confirmSessionDelete);
+        }
 
-        // Inizializzazione
-        loadUserData();
-        loadTheme();
-        disableZoom(); // AGGIUNGI QUESTA RIGA PER DISABILITARE LO ZOOM
-        setupUppercaseRepsInputs();
-        setupCapitalizeExerciseNames();
-        
-        // Imposta il gestore per il pulsante di conferma eliminazione
-        document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
-        document.getElementById('confirmSessionDeleteBtn').addEventListener('click', confirmSessionDelete);
+        // AVVIA L'APP
+        initApp();
 
         // AGGIUNGI QUESTE 5 RIGHE IN FONDO
         if ('serviceWorker' in navigator) {
