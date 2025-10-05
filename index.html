@@ -1606,7 +1606,7 @@
             <h2>Crea Nuova Sessione</h2>
             <p>Inserisci il nome della nuova sessione di allenamento</p>
             
-            <input type="text" id="newSessionName" placeholder="es. Sessione D" maxlength="20">
+            <input type="text" id="newSessionName" placeholder="es. D, E, ecc" maxlength="20">
             
             <button class="session-modal-btn" onclick="createNewSession()">💾 Crea Sessione</button>
         </div>
@@ -1806,6 +1806,9 @@
                 
                 // Aggiorna l'ordine delle sessioni
                 sessionOrder = Object.keys(savedData);
+            } else {
+                // Se non ci sono dati salvati, usa i dati predefiniti
+                saveWorkoutData();
             }
         }
 
@@ -1839,6 +1842,18 @@
                 document.getElementById('userName').textContent = userName;
                 document.getElementById('startDate').textContent = formatDisplayDate(startDate);
                 document.getElementById('appContent').classList.add('show');
+                
+                // CARICA E VISUALIZZA I DATI SUBITO DOPO IL LOGIN
+                loadWorkoutData();
+                loadSessionOrder();
+                loadSavedWeights();
+                renderSessionTabs();
+                renderAllSessions();
+                
+                // FORZA LA VISUALIZZAZIONE DELLA PRIMA SESSIONE
+                if (sessionOrder.length > 0) {
+                    showSession(sessionOrder[0]);
+                }
             }
         }
 
@@ -1874,6 +1889,18 @@
             document.getElementById('startDate').textContent = formatDisplayDate(startDate);
             document.getElementById('welcomeScreen').classList.remove('show');
             document.getElementById('appContent').classList.add('show');
+            
+            // CARICA E VISUALIZZA I DATI SUBITO DOPO IL LOGIN
+            loadWorkoutData();
+            loadSessionOrder();
+            loadSavedWeights();
+            renderSessionTabs();
+            renderAllSessions();
+            
+            // FORZA LA VISUALIZZAZIONE DELLA PRIMA SESSIONE
+            if (sessionOrder.length > 0) {
+                showSession(sessionOrder[0]);
+            }
         }
 
         function formatDisplayDate(dateString) {
@@ -2127,11 +2154,6 @@
                 
                 tab.onclick = () => showSession(sessionId);
                 
-                // Imposta la prima sessione come attiva
-                if (sessionOrder.indexOf(sessionId) === 0) {
-                    tab.classList.add('active');
-                }
-                
                 tabsContainer.appendChild(tab);
             });
             
@@ -2143,6 +2165,14 @@
                 addBtn.title = 'Aggiungi nuova sessione';
                 addBtn.onclick = openSessionModal;
                 tabsContainer.appendChild(addBtn);
+            }
+            
+            // IMPOSTA LA PRIMA TAB COME ATTIVA
+            if (sessionOrder.length > 0) {
+                const firstTab = tabsContainer.querySelector('.tab');
+                if (firstTab) {
+                    firstTab.classList.add('active');
+                }
             }
         }
 
@@ -2165,104 +2195,106 @@
             
             container.innerHTML = '';
             
-            workoutData[sessionId].forEach((exercise, index) => {
-                const exerciseId = `${sessionId}-${index}`;
-                const savedWeight = savedWeights[exerciseId] || '';
-                
-                const exerciseDiv = document.createElement('div');
-                exerciseDiv.className = 'exercise';
-                
-                if (editMode) {
-                    exerciseDiv.innerHTML = `
-                        <div class="exercise-header-edit">
-                            <input 
-                                type="text" 
-                                class="exercise-name-edit" 
-                                value="${exercise.name}"
-                                onchange="workoutData['${sessionId}'][${index}].name = this.value; saveWorkoutData();"
-                            >
-                            <button class="delete-btn" onclick="deleteExercise('${sessionId}', ${index})">🗑️</button>
-                        </div>
-                        <div class="exercise-info">
-                            <div class="info-item">
-                                <div class="info-label">SERIE</div>
-                                <div class="number-input-container">
-                                    <button class="number-btn" onclick="decreaseSeries('${sessionId}', ${index})">-</button>
-                                    <input 
-                                        type="number" 
-                                        class="number-input" 
-                                        value="${exercise.series}"
-                                        onchange="workoutData['${sessionId}'][${index}].series = parseInt(this.value); saveWorkoutData();"
-                                    >
-                                    <button class="number-btn" onclick="increaseSeries('${sessionId}', ${index})">+</button>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">REPS</div>
+            if (workoutData[sessionId]) {
+                workoutData[sessionId].forEach((exercise, index) => {
+                    const exerciseId = `${sessionId}-${index}`;
+                    const savedWeight = savedWeights[exerciseId] || '';
+                    
+                    const exerciseDiv = document.createElement('div');
+                    exerciseDiv.className = 'exercise';
+                    
+                    if (editMode) {
+                        exerciseDiv.innerHTML = `
+                            <div class="exercise-header-edit">
                                 <input 
                                     type="text" 
-                                    class="info-value-edit" 
-                                    value="${exercise.reps}"
-                                    onchange="workoutData['${sessionId}'][${index}].reps = this.value; saveWorkoutData();"
+                                    class="exercise-name-edit" 
+                                    value="${exercise.name}"
+                                    onchange="workoutData['${sessionId}'][${index}].name = this.value; saveWorkoutData();"
                                 >
+                                <button class="delete-btn" onclick="deleteExercise('${sessionId}', ${index})">🗑️</button>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">RECUPERO</div>
-                                <div class="recovery-input-container">
-                                    <button class="recovery-btn" onclick="decreaseRecovery('${sessionId}', ${index})">-</button>
+                            <div class="exercise-info">
+                                <div class="info-item">
+                                    <div class="info-label">SERIE</div>
+                                    <div class="number-input-container">
+                                        <button class="number-btn" onclick="decreaseSeries('${sessionId}', ${index})">-</button>
+                                        <input 
+                                            type="number" 
+                                            class="number-input" 
+                                            value="${exercise.series}"
+                                            onchange="workoutData['${sessionId}'][${index}].series = parseInt(this.value); saveWorkoutData();"
+                                        >
+                                        <button class="number-btn" onclick="increaseSeries('${sessionId}', ${index})">+</button>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">REPS</div>
                                     <input 
                                         type="text" 
-                                        class="recovery-input" 
-                                        value="${exercise.recovery}"
-                                        onchange="workoutData['${sessionId}'][${index}].recovery = this.value; saveWorkoutData();"
+                                        class="info-value-edit" 
+                                        value="${exercise.reps}"
+                                        onchange="workoutData['${sessionId}'][${index}].reps = this.value.toUpperCase(); saveWorkoutData();"
                                     >
-                                    <button class="recovery-btn" onclick="increaseRecovery('${sessionId}', ${index})">+</button>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">RECUPERO</div>
+                                    <div class="recovery-input-container">
+                                        <button class="recovery-btn" onclick="decreaseRecovery('${sessionId}', ${index})">-</button>
+                                        <input 
+                                            type="text" 
+                                            class="recovery-input" 
+                                            value="${exercise.recovery}"
+                                            onchange="workoutData['${sessionId}'][${index}].recovery = this.value; saveWorkoutData();"
+                                        >
+                                        <button class="recovery-btn" onclick="increaseRecovery('${sessionId}', ${index})">+</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="weight-input">
-                            <label>Carico usato:</label>
-                            <input 
-                                type="text" 
-                                id="${exerciseId}" 
-                                placeholder="es. 20" 
-                                value="${savedWeight}"
-                                disabled
-                            >
-                            <span>kg</span>
-                        </div>
-                    `;
-                } else {
-                    exerciseDiv.innerHTML = `
-                        <div class="exercise-name">${exercise.name}</div>
-                        <div class="exercise-info">
-                            <div class="info-item">
-                                <div class="info-label">SERIE</div>
-                                <div class="info-value">${exercise.series}</div>
+                            <div class="weight-input">
+                                <label>Carico usato:</label>
+                                <input 
+                                    type="text" 
+                                    id="${exerciseId}" 
+                                    placeholder="es. 20" 
+                                    value="${savedWeight}"
+                                    disabled
+                                >
+                                <span>kg</span>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">REPS</div>
-                                <div class="info-value">${exercise.reps}</div>
+                        `;
+                    } else {
+                        exerciseDiv.innerHTML = `
+                            <div class="exercise-name">${exercise.name}</div>
+                            <div class="exercise-info">
+                                <div class="info-item">
+                                    <div class="info-label">SERIE</div>
+                                    <div class="info-value">${exercise.series}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">REPS</div>
+                                    <div class="info-value">${exercise.reps}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">RECUPERO</div>
+                                    <div class="info-value">${exercise.recovery}</div>
+                                </div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">RECUPERO</div>
-                                <div class="info-value">${exercise.recovery}</div>
+                            <div class="weight-input">
+                                <label>Carico usato:</label>
+                                <input 
+                                    type="text" 
+                                    id="${exerciseId}" 
+                                    placeholder="es. 20" 
+                                    value="${savedWeight}"
+                                >
+                                <span>kg</span>
                             </div>
-                        </div>
-                        <div class="weight-input">
-                            <label>Carico usato:</label>
-                            <input 
-                                type="text" 
-                                id="${exerciseId}" 
-                                placeholder="es. 20" 
-                                value="${savedWeight}"
-                            >
-                            <span>kg</span>
-                        </div>
-                    `;
-                }
-                container.appendChild(exerciseDiv);
-            });
+                        `;
+                    }
+                    container.appendChild(exerciseDiv);
+                });
+            }
             
             if (editMode) {
                 const addBtn = document.createElement('button');
@@ -2317,7 +2349,10 @@
                 targetTab.classList.add('active');
             }
             
-            document.getElementById(`session${sessionId}`).classList.add('active');
+            const targetSession = document.getElementById(`session${sessionId}`);
+            if (targetSession) {
+                targetSession.classList.add('active');
+            }
         }
 
         function saveWorkout() {
@@ -2338,14 +2373,68 @@
             }, 2500);
         }
 
+
+        // Funzione per convertire automaticamente in maiuscolo SOLO per le reps
+function setupUppercaseRepsInputs() {
+    document.addEventListener('input', function(e) {
+        // Controlla se è un input delle REPS
+        if (e.target.classList.contains('info-value-edit')) {
+            const infoLabel = e.target.parentElement.querySelector('.info-label');
+            if (infoLabel && infoLabel.textContent === 'REPS') {
+                e.target.value = e.target.value.toUpperCase();
+                
+                // Aggiorna anche i dati nel workoutData
+                const exerciseElement = e.target.closest('.exercise');
+                if (exerciseElement) {
+                    const sessionElement = exerciseElement.closest('.session');
+                    if (sessionElement) {
+                        const sessionId = sessionElement.id.replace('session', '');
+                        const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+                        
+                        if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
+                            workoutData[sessionId][exerciseIndex].reps = e.target.value.toUpperCase();
+                            saveWorkoutData();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+// Funzione per mettere la prima lettera maiuscola nei nomi degli esercizi
+function setupCapitalizeExerciseNames() {
+    document.addEventListener('input', function(e) {
+        // Controlla se è un input del nome dell'esercizio
+        if (e.target.classList.contains('exercise-name-edit')) {
+            const value = e.target.value;
+            if (value.length > 0) {
+                e.target.value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+                
+                // Aggiorna anche i dati nel workoutData
+                const exerciseElement = e.target.closest('.exercise');
+                if (exerciseElement) {
+                    const sessionElement = exerciseElement.closest('.session');
+                    if (sessionElement) {
+                        const sessionId = sessionElement.id.replace('session', '');
+                        const exerciseIndex = Array.from(exerciseElement.parentElement.children).indexOf(exerciseElement);
+                        
+                        if (workoutData[sessionId] && workoutData[sessionId][exerciseIndex]) {
+                            workoutData[sessionId][exerciseIndex].name = e.target.value;
+                            saveWorkoutData();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
         // Inizializzazione
         loadUserData();
         loadTheme();
-        loadWorkoutData();
-        loadSessionOrder();
-        loadSavedWeights();
-        renderSessionTabs();
-        renderAllSessions();
+        setupUppercaseRepsInputs(); // Aggiungi questa riga
+        setupCapitalizeExerciseNames(); // Aggiungi questa riga (prima maiuscola es)
         
         // Imposta il gestore per il pulsante di conferma eliminazione
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
